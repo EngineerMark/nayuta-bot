@@ -12,23 +12,9 @@ namespace nayuta
     {
         private DiscordSocketClient _client;
 
-        public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
-
-        public async Task MainAsync()
+        public static void Main(string[] args)
         {
-            _client = new DiscordSocketClient();
-            _client.Log += Log;
-            var token = "ODA5OTEyMTUzNTgyNzMxMzI0.YCb_eA.E6W2dgDkUrcO1ptZvlnPMX2yo3w";
-
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync();
-            await Task.Delay(-1);
-        }
-
-        private Task Log(LogMessage msg)
-        {
-            Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
+            new Bot("ODA5OTEyMTUzNTgyNzMxMzI0.YCb_eA.E6W2dgDkUrcO1ptZvlnPMX2yo3w", "n!");
         }
     }
 }
