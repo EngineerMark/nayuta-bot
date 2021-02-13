@@ -1,23 +1,31 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using nayuta.Commands;
+using nayuta.Coroutine;
 
 namespace nayuta
 {
     public class Bot
     {
+        private CommandManager _commandManager;
         private DiscordSocketClient _discordClient;
         private readonly string _discordToken;
-        private readonly string prefix;
-        
+        public string Prefix { get; }
+
         public Bot(string token, string prefix)
         {
-            this.prefix = prefix;
+            this.Prefix = prefix;
             _discordToken = token;
+
+            _commandManager = new CommandManager(this);
+            _commandManager.RegisterCommand(new CommandPing());
+
             MainAsync().GetAwaiter().GetResult();
         }
 
@@ -35,17 +43,20 @@ namespace nayuta
 
         private async Task MessageReceived(SocketMessage socketMessage)
         {
-            string parsedMessage = socketMessage.Content.ToLower();
-            if (socketMessage.Author.IsBot)
-                return;
-
-            if (parsedMessage.Equals(prefix + "ping"))
-                await SendStringMessage(socketMessage, "Pong");
+            Yielder.Instance.StartCoroutine(_commandManager.ProcessCommands(this, socketMessage));
         }
 
-        private async Task SendStringMessage(SocketMessage sourceMessage, string message)
+        public IEnumerator SendStringMessage(SocketMessage sourceMessage, string message)
         {
-            await sourceMessage.Channel.SendMessageAsync(message);
+            //yield return WaitFor.WaitForSeconds(5);
+            sourceMessage.Channel.SendMessageAsync(message);
+            yield return null;
+        }
+
+        public IEnumerator SendEmbedMessage(SocketMessage sourceMessage, Embed embed)
+        {
+            sourceMessage.Channel.SendMessageAsync(null, false, embed);
+            yield return null;
         }
 
         private Task Log(LogMessage msg)

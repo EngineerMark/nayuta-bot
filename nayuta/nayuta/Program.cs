@@ -4,17 +4,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using nayuta.Coroutine;
 
 namespace nayuta
 {
-    class Program
+    internal static class Program
     {
-        private DiscordSocketClient _client;
+        private static DiscordSocketClient _client;
+        private static Yielder yielder;
+        private static Thread updateThread;
 
         public static void Main(string[] args)
         {
-            new Bot("ODA5OTEyMTUzNTgyNzMxMzI0.YCb_eA.E6W2dgDkUrcO1ptZvlnPMX2yo3w", "n!");
+            yielder = new Yielder();
+            
+            Bot bot = new Bot("ODA5OTEyMTUzNTgyNzMxMzI0.YCb_eA.E6W2dgDkUrcO1ptZvlnPMX2yo3w", "n!");
+
+            updateThread = new Thread(new ThreadStart(Update));
+            updateThread.Start();
+        }
+
+        private static void Update()
+        {
+            if(yielder!=null)
+                yielder.ProcessCoroutines();
+            Thread.Sleep(0);
         }
     }
 }
