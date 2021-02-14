@@ -37,12 +37,22 @@ namespace nayuta
             foreach (Command command in commands)
             {
                 var status = command.Handle(socketMessage);
+                bool success = false;
+                
                 if (status.GetType().Equals(typeof(string)))
                 {
                     Yielder.Instance.StartCoroutine(bot.SendStringMessage(socketMessage, (string) status));
+                    success = true;
                 }else if (status.GetType().Equals(typeof(EmbedBuilder)))
                 {
                     Yielder.Instance.StartCoroutine(bot.SendEmbedMessage(socketMessage, ((EmbedBuilder)status).Build()));
+                    success = true;
+                }
+
+                if (success)
+                {
+                    Yielder.Instance.StartCoroutine((bot.SendStringMessage(socketMessage, "Debug: latency is "+Math.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
+                        socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms")));
                 }
             }
             

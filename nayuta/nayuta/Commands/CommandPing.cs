@@ -1,15 +1,18 @@
-﻿using Discord.WebSocket;
+﻿using System;
+using Discord.WebSocket;
 
 namespace nayuta.Commands
 {
     public class CommandPing : Command
     {
-        public CommandPing() : base("ping", null)
+        public CommandPing() : base("ping")
         {
-            returnFunc = (SocketMessage socketMessage, string input) =>
-            {
-                return "Pong";
-            };
+        }
+
+        public override object CommandHandler(SocketMessage socketMessage, string input)
+        {
+            return "Pong ("+ Math.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
+                                      socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms)";
         }
     }
 }

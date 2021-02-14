@@ -25,6 +25,8 @@ namespace nayuta
 
             _commandManager = new CommandManager(this);
             _commandManager.RegisterCommand(new CommandPing());
+            _commandManager.RegisterCommand(new CommandEcchi());
+            _commandManager.RegisterCommand(new CommandSystem());
 
             MainAsync().GetAwaiter().GetResult();
         }

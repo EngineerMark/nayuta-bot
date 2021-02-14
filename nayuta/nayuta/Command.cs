@@ -4,7 +4,7 @@ using Discord.WebSocket;
 
 namespace nayuta
 {
-    public class Command
+    public abstract class Command : ICommand
     {
         /// <summary>
         /// If true, the command will test any string text after the command itself
@@ -17,11 +17,13 @@ namespace nayuta
 
         protected ReturnFunc returnFunc;
         
-        public Command(string commandName, ReturnFunc returnFunc)
+        public Command(string commandName)
         {
             this.commandName = commandName;
-            this.returnFunc = returnFunc;
+            this.returnFunc = CommandHandler;
         }
+
+        public abstract object CommandHandler(SocketMessage socketMessage, string input);
 
         public dynamic Handle(SocketMessage socketMessage)
         {
