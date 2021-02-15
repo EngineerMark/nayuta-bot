@@ -16,17 +16,31 @@ namespace nayuta
         private CommandManager _commandManager;
         private DiscordSocketClient _discordClient;
         private readonly string _discordToken;
+        private readonly Color _botColor = new Color(255, 153, 153);
+        
         public string Prefix { get; }
 
+        public DiscordSocketClient DiscordClient
+        {
+            get => _discordClient;
+        }
+        
+        public Color BotColor
+        {
+            get => _botColor;
+        }
+        
         public Bot(string token, string prefix)
         {
             this.Prefix = prefix;
             _discordToken = token;
 
             _commandManager = new CommandManager(this);
+            _commandManager.RegisterCommand(new CommandHelp());
             _commandManager.RegisterCommand(new CommandPing());
             _commandManager.RegisterCommand(new CommandEcchi());
             _commandManager.RegisterCommand(new CommandSystem());
+            _commandManager.RegisterCommand(new CommandOsuProfile());
 
             MainAsync().GetAwaiter().GetResult();
         }

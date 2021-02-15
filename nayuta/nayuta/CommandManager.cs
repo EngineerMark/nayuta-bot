@@ -15,6 +15,12 @@ namespace nayuta
         
         private List<Command> commands = new List<Command>();
 
+        public List<Command> Commands
+        {
+            get => commands;
+            private set => commands = value;
+        }
+
         public CommandManager(Bot bot)
         {
             Instance = this;
@@ -24,6 +30,7 @@ namespace nayuta
         public void RegisterCommand(Command command)
         {
             commands.Add(command);
+            command.ParentManager = this;
         }
 
         public IEnumerator ProcessCommands(Bot bot, SocketMessage socketMessage)
@@ -32,22 +39,19 @@ namespace nayuta
             if (socketMessage.Author.IsBot)
                 yield break;
 
-            // if (parsedMessage.Equals(bot.Prefix + "ping"))
-            //     Yielder.Instance.StartCoroutine(bot.SendStringMessage(socketMessage, "Pong"));
             foreach (Command command in commands)
             {
-                var status = command.Handle(socketMessage);
-                bool success = false;
+                dynamic status = command.Handle(socketMessage);
+                bool success = true;
                 
                 if (status.GetType().Equals(typeof(string)))
-                {
                     Yielder.Instance.StartCoroutine(bot.SendStringMessage(socketMessage, (string) status));
-                    success = true;
-                }else if (status.GetType().Equals(typeof(EmbedBuilder)))
-                {
+                else if (status.GetType().Equals(typeof(EmbedBuilder)))
                     Yielder.Instance.StartCoroutine(bot.SendEmbedMessage(socketMessage, ((EmbedBuilder)status).Build()));
-                    success = true;
-                }
+                else if (status.GetType().Equals(typeof(Embed)))
+                    Yielder.Instance.StartCoroutine(bot.SendEmbedMessage(socketMessage, (Embed) status));
+                else
+                    success = false;
 
                 if (success)
                 {

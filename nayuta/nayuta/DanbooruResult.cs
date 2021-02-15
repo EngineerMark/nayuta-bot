@@ -18,5 +18,8 @@ namespace nayuta
         
         [JsonProperty("tag_string_artist")]
         public string Uploader { get; set; }
+        
+        [JsonProperty("tag_string_character")]
+        public string Characters { get; set; }
     }
 }

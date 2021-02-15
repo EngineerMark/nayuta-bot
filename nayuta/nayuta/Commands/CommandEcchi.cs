@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web;
 using Discord;
@@ -20,18 +21,24 @@ namespace nayuta.Commands
             returnFunc = CommandHandler;
             InputValue = true;
 
-            apiUrl = "https://danbooru.donmai.us/posts.json?login=" + danbooruUser + "&api_key=" + danbooruApiKey;
+            apiUrl = "https://danbooru.donmai.us/posts/random.json?login=" + danbooruUser + "&api_key=" + danbooruApiKey;
         }
 
         public override object CommandHandler(SocketMessage socketMessage, string input)
         {
-            string test = apiUrl + "&tags=" + HttpUtility.UrlEncode(input+" rating:explicit")+"&limit=100";
-            WebClient client = new WebClient();
-            string s = client.DownloadString(test);
+            List<string> inputArray = input.Split(' ').ToList();
+            inputArray = inputArray.Select(s=>
+            {
+                return "*_" + HttpUtility.UrlEncode(s) + "_*";
+            }).ToList();
 
-            List<DanbooruResult> result = JsonConvert.DeserializeObject<List<DanbooruResult>>(s);
 
-            DanbooruResult randomResult = result[new Random().Next(0, result.Count)];
+            //string test = apiUrl+"&tags=" + ("*_"+safeInput+"_*")+"%20rating:e"+"&limit=100&order=score";
+            string tagUrl = "&tags="+(string.Join(" ", inputArray))+"%20rating:e";
+            //return "`"+tagUrl+"`";
+            DanbooruResult result = APIHelper<DanbooruResult>.GetData(apiUrl + tagUrl);
+
+            //DanbooruResult randomResult = result[new Random().Next(0, result.Count)];
 
             //return "Result value: " + randomResult.FileUrl;
 
@@ -39,10 +46,18 @@ namespace nayuta.Commands
             EmbedBuilder embed = new EmbedBuilder()
             {
                 Title = "Heres some",
-                ImageUrl = randomResult.FileUrl,
+                ImageUrl = result.FileUrl,
+                Fields = new List<EmbedFieldBuilder>()
+                {
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Character(s)",
+                        Value = result.Characters
+                    }  
+                },
                 Footer = new EmbedFooterBuilder()
                 {
-                    Text = "Uploaded by "+randomResult.Uploader
+                    Text = "Uploaded by "+result.Uploader
                 }
             };
             
