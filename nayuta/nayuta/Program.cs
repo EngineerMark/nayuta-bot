@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using nayuta.Coroutine;
+using nayuta.Internal;
 
 namespace nayuta
 {
@@ -30,8 +31,9 @@ namespace nayuta
 
         private static void Close(object sender, EventArgs e)
         {
-            DatabaseManager.Instance.Close();
+            //DatabaseManager.Instance.Close();
             Console.WriteLine("Closed.");
+            InternalUserManager.Instance.SessionUsers.ForEach(user=>DatabaseManager.Instance.UpdateUser(user));
         }
 
         private static void Update()

@@ -8,6 +8,7 @@ using Discord;
 using Discord.WebSocket;
 using nayuta.Commands;
 using nayuta.Coroutine;
+using nayuta.Internal;
 
 namespace nayuta
 {
@@ -15,6 +16,7 @@ namespace nayuta
     {
         private CommandManager _commandManager;
         private DatabaseManager _databaseManager;
+        private InternalUserManager _internalUserManager;
         
         private DiscordSocketClient _discordClient;
         private readonly string _discordToken;
@@ -42,10 +44,12 @@ namespace nayuta
             _commandManager.RegisterCommand(new CommandPing());
             _commandManager.RegisterCommand(new CommandEcchi());
             _commandManager.RegisterCommand(new CommandSystem());
+            _commandManager.RegisterCommand(new CommandOsuRegister());
             _commandManager.RegisterCommand(new CommandOsuProfile());
 
             _databaseManager = new DatabaseManager();
-
+            _internalUserManager = new InternalUserManager();
+            
             MainAsync().GetAwaiter().GetResult();
         }
 

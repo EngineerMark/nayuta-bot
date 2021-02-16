@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Discord;
 using Discord.WebSocket;
 using nayuta.Coroutine;
+using nayuta.Internal;
 
 namespace nayuta
 {
@@ -39,6 +40,10 @@ namespace nayuta
             if (socketMessage.Author.IsBot)
                 yield break;
 
+            InternalUser user = DatabaseManager.Instance.GetUser(socketMessage.Author.Id);
+            if (user == null)
+                user = new InternalUser() {DiscordID = socketMessage.Author.Id.ToString(),IsNewUser = true};
+            
             foreach (Command command in commands)
             {
                 dynamic status = command.Handle(socketMessage);
@@ -55,6 +60,7 @@ namespace nayuta
 
                 if (success)
                 {
+                    DatabaseManager.Instance.UpdateUser(user);
                     // Yielder.Instance.StartCoroutine((bot.SendStringMessage(socketMessage, "Debug: latency is "+Math.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
                     //     socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms")));
                 }

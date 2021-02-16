@@ -47,12 +47,11 @@ namespace nayuta
             string enteredCommand = inputString;
             List<string> splitInputString = enteredCommand.Split(' ').ToList();
             if (enteredCommand.Contains(" "))
-            {
                 enteredCommand = splitInputString[0];
+            if(splitInputString.Count>0)
                 splitInputString.RemoveAt(0);
-            }
 
-            string inputStringAdditional = splitInputString.Aggregate((i, j) => i + " " + j);
+            string inputStringAdditional = splitInputString.Count>0?splitInputString.Aggregate((i, j) => i + " " + j):"";
 
             if (enteredCommand == CommandManager.Instance.bot.Prefix + commandName)
                 return returnFunc(socketMessage, InputValue?inputStringAdditional:null);

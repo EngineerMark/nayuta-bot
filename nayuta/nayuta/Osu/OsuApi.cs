@@ -10,7 +10,13 @@ namespace nayuta.Osu
         public static OsuUser GetUser(string username, OsuMode mode = OsuMode.Standard)
         {
             List<OsuUser> users = APIHelper<List<OsuUser>>.GetData(apiUrl + "get_user?k="+apiKey+"&u=" + username + "&m="+(int)mode);
-            return users.Count > 0 ? users[0] : null;
+            if (users.Count > 0)
+            {
+                //users[0].SetUserpage();
+                return users[0];
+            }
+
+            return null;
         }
 
         public static List<OsuPlay> GetUserBest(OsuUser user, OsuMode mode = OsuMode.Standard, int limit = 5, bool generateBeatmaps = false)

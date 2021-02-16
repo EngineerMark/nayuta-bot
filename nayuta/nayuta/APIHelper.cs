@@ -26,7 +26,7 @@ namespace nayuta
             return JsonConvert.DeserializeObject<T>(data);
         }
 
-        private static string GetDataFromWeb(string url)
+        public static string GetDataFromWeb(string url)
         {
             WebClient client = new WebClient();
             string s = client.DownloadString(url);

@@ -1,7 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
 
 namespace nayuta.Osu
 {
+    public struct Userpage
+    {
+        public PlayHistory PlayHistory;
+    }
+
+    public struct PlayHistory
+    {
+        public PlayHistoryNode[] HistoryNodes;
+    }
+
+    public struct PlayHistoryNode
+    {
+        public string Month;
+        public string Playtime;
+    }
+    
     public class OsuUser
     {
         [JsonProperty("user_id")]
@@ -39,5 +56,27 @@ namespace nayuta.Osu
         
         [JsonProperty("playcount")]
         public int Playcount { get; set; }
+        
+        public Userpage Userpage { get; set; }
+
+        public void SetUserpage()
+        {
+            string url = "https://osu.ppy.sh/users/"+ID;
+            string data = APIHelper<string>.GetDataFromWeb(url);
+
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(data);
+            
+            var htmlBody = doc.DocumentNode.SelectSingleNode("//body");
+            
+            //Playhistory
+            var graphNodes = doc.DocumentNode.SelectNodes("//g[@class='line-chart__axis--x']");
+            
+            foreach (HtmlNode node in graphNodes)
+            {
+                string value = node.InnerText;
+                // etc...
+            }
+        }
     }
 }

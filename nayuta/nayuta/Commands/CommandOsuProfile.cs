@@ -7,6 +7,7 @@ using Discord;
 using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
+using nayuta.Internal;
 using nayuta.Osu;
 
 namespace nayuta.Commands
@@ -17,17 +18,25 @@ namespace nayuta.Commands
         {
             InputValue = true;
         }
-        
+
         public override object CommandHandler(SocketMessage socketMessage, string input)
         {
-            if (string.IsNullOrEmpty(input))
-                return "Please enter a username to view their profile";
             OsuMode mode = OsuMode.Standard;
 
-            if (input.Contains(" -m "))
+            if (input.Contains("-m ") || input.Contains(" -m "))
             {
-                string foundMode = input.Substring(input.IndexOf(" -m ") + " -m ".Length);
-                input = input.Substring(0, input.IndexOf(" -m "));
+                string foundMode = "";
+                if (input.Contains(" -m "))
+                {
+                    foundMode = input.Substring(input.IndexOf(" -m ") + " -m ".Length);
+                    input = input.Substring(0, input.IndexOf(" -m "));
+                }
+                else
+                {
+                    foundMode = input.Substring(input.IndexOf("-m ") + "-m ".Length);
+                    input = input.Substring(0, input.IndexOf("-m "));
+                }
+
                 switch (foundMode.ToLower())
                 {
                     case "standard":
@@ -47,12 +56,24 @@ namespace nayuta.Commands
                         return (foundMode + " is not a valid gamemode.").Humanize();
                 }
             }
-            
-            string username = HttpUtility.HtmlEncode(input); // Test value
+
+            OsuUser user = null;
+            if (string.IsNullOrEmpty(input))
+            {
+                InternalUser internalUser = DatabaseManager.Instance.GetUser(socketMessage.Author.Id);
+                if (string.IsNullOrEmpty(internalUser.OsuUserID))
+                    return "Please enter a username to view their profile";
+                user = OsuApi.GetUser(internalUser.OsuUserID, mode);
+            }
+
+            if (user == null)
+            {
+                string username = HttpUtility.HtmlEncode(input); // Test value
+                user = OsuApi.GetUser(username, mode);
+            }
 
             //List<OsuUser> users = APIHelper<List<OsuUser>>.GetData(apiUrl + "get_user?u&k="+apiKey+"&u=" + username);
-            OsuUser user = OsuApi.GetUser(username, mode);
-            if (user==null)
+            if (user == null)
                 return "No user has been found.";
             else
             {
@@ -80,29 +101,32 @@ namespace nayuta.Commands
                 EmbedBuilder embed = new EmbedBuilder()
                 {
                     Color = ParentManager.bot.BotColor,
-                    Title = "Profile of "+user.Name,
-                    ThumbnailUrl = "https://a.ppy.sh/"+user.ID,
-                    Description = "Showing osu!"+mode+" statistics",
+                    Title = "Profile of " + user.Name,
+                    ThumbnailUrl = "https://a.ppy.sh/" + user.ID,
+                    Description = "Showing osu!" + mode + " statistics",
                     Fields = new List<EmbedFieldBuilder>()
                     {
                         new EmbedFieldBuilder()
                         {
                             Name = "Rank",
-                            Value = 
-                                user.Performance==0?
-                                    "No PP or inactive":
-                                    ("#" + user.Globalrank.FormatNumber() + " (:flag_" + user.CountryCode.ToLower() + ": #" + user.Countryrank.FormatNumber() + ")"),
+                            Value =
+                                user.Performance == 0
+                                    ? "No PP or inactive"
+                                    : ("#" + user.Globalrank.FormatNumber() + " (:flag_" + user.CountryCode.ToLower() +
+                                       ": #" + user.Countryrank.FormatNumber() + ")"),
                         },
                         new EmbedFieldBuilder()
                         {
                             Name = "Performance",
-                            Value = Math.Round(user.Performance).FormatNumber()+"pp",
+                            Value = Math.Round(user.Performance).FormatNumber() + "pp",
                             IsInline = true
                         },
                         new EmbedFieldBuilder()
                         {
                             Name = "Level",
-                            Value = Math.Floor(user.Level)+" ("+Math.Round((Math.Round(user.Level, 2)-Math.Floor(user.Level))*100)+"% to level "+ (Math.Ceiling(user.Level))+")",
+                            Value = Math.Floor(user.Level) + " (" +
+                                    Math.Round((Math.Round(user.Level, 2) - Math.Floor(user.Level)) * 100) +
+                                    "% to level " + (Math.Ceiling(user.Level)) + ")",
                             IsInline = true
                         },
                         EmbedHelper.BlankField,
@@ -136,7 +160,7 @@ namespace nayuta.Commands
                     },
                     Footer = new EmbedFooterBuilder()
                     {
-                        Text = "User registered "+DateTime.Parse(user.Joindate).Humanize()
+                        Text = "User registered " + DateTime.Parse(user.Joindate).Humanize()
                     }
                 };
 
