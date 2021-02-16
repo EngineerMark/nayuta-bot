@@ -7,9 +7,9 @@ using nayuta.Coroutine;
 
 namespace nayuta
 {
-    public class CommandManager
+    public class CommandManager : Manager<CommandManager>
     {
-        public static CommandManager Instance;
+        //public static CommandManager Instance;
 
         public Bot bot;
         
@@ -23,7 +23,7 @@ namespace nayuta
 
         public CommandManager(Bot bot)
         {
-            Instance = this;
+            //Instance = this;
             this.bot = bot;
         }
 
@@ -55,8 +55,8 @@ namespace nayuta
 
                 if (success)
                 {
-                    Yielder.Instance.StartCoroutine((bot.SendStringMessage(socketMessage, "Debug: latency is "+Math.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
-                        socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms")));
+                    // Yielder.Instance.StartCoroutine((bot.SendStringMessage(socketMessage, "Debug: latency is "+Math.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
+                    //     socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms")));
                 }
             }
             

@@ -14,6 +14,8 @@ namespace nayuta
     public class Bot
     {
         private CommandManager _commandManager;
+        private DatabaseManager _databaseManager;
+        
         private DiscordSocketClient _discordClient;
         private readonly string _discordToken;
         private readonly Color _botColor = new Color(255, 153, 153);
@@ -41,6 +43,8 @@ namespace nayuta
             _commandManager.RegisterCommand(new CommandEcchi());
             _commandManager.RegisterCommand(new CommandSystem());
             _commandManager.RegisterCommand(new CommandOsuProfile());
+
+            _databaseManager = new DatabaseManager();
 
             MainAsync().GetAwaiter().GetResult();
         }

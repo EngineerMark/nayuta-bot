@@ -24,6 +24,14 @@ namespace nayuta
 
             updateThread = new Thread(new ThreadStart(Update));
             updateThread.Start();
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Close);
+        }
+
+        private static void Close(object sender, EventArgs e)
+        {
+            DatabaseManager.Instance.Close();
+            Console.WriteLine("Closed.");
         }
 
         private static void Update()
