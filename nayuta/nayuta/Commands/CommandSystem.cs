@@ -14,7 +14,7 @@ namespace nayuta.Commands
             ["CPU"] = "",
         };
         
-        public CommandSystem() : base("status")
+        public CommandSystem() : base("status", "Shows what Nayuta runs on")
         {
 
         }

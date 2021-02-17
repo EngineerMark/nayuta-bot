@@ -5,7 +5,7 @@ namespace nayuta.Commands
 {
     public class CommandPing : Command
     {
-        public CommandPing() : base("ping")
+        public CommandPing() : base("ping", "Test command to show network performance")
         {
         }
 

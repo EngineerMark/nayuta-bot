@@ -16,7 +16,7 @@ namespace nayuta.Commands
 
         private readonly string apiUrl;
 
-        public CommandEcchi() : base("hentai")
+        public CommandEcchi() : base("hentai", "Returns a random hentai image based on input")
         {
             returnFunc = CommandHandler;
             InputValue = true;
