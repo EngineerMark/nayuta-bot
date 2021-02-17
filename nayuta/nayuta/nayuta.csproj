@@ -184,6 +184,7 @@
     <Compile Include="Commands\CommandHelp.cs" />
     <Compile Include="Commands\CommandOsu.cs" />
     <Compile Include="Commands\CommandOsuProfile.cs" />
+    <Compile Include="Commands\CommandOsuRecent.cs" />
     <Compile Include="Commands\CommandOsuRegister.cs" />
     <Compile Include="Commands\CommandPing.cs" />
     <Compile Include="Commands\CommandSystem.cs" />

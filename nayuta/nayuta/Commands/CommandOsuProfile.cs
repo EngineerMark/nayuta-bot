@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Web;
 using Discord;
 using Discord.WebSocket;
@@ -28,13 +26,13 @@ namespace nayuta.Commands
                 string foundMode = "";
                 if (input.Contains(" -m "))
                 {
-                    foundMode = input.Substring(input.IndexOf(" -m ") + " -m ".Length);
-                    input = input.Substring(0, input.IndexOf(" -m "));
+                    foundMode = input.Substring(input.IndexOf(" -m ", StringComparison.Ordinal) + " -m ".Length);
+                    input = input.Substring(0, input.IndexOf(" -m ", StringComparison.Ordinal));
                 }
                 else
                 {
-                    foundMode = input.Substring(input.IndexOf("-m ") + "-m ".Length);
-                    input = input.Substring(0, input.IndexOf("-m "));
+                    foundMode = input.Substring(input.IndexOf("-m ", StringComparison.Ordinal) + "-m ".Length);
+                    input = input.Substring(0, input.IndexOf("-m ", StringComparison.Ordinal));
                 }
 
                 switch (foundMode.ToLower())
