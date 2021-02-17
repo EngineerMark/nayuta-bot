@@ -1,13 +1,75 @@
-﻿using Discord.WebSocket;
+﻿using System;
+using System.Web;
+using Discord.WebSocket;
+using Humanizer;
+using nayuta.Internal;
+using nayuta.Osu;
 
 namespace nayuta.Commands
 {
     public abstract class CommandOsu : Command
     {
+        protected OsuUser _osuUser;
+        protected OsuMode _osuMode;
+        
         public CommandOsu(string command, string description = null) : base("osu"+command, description)
         {
         }
 
         public override abstract object CommandHandler(SocketMessage socketMessage, string input);
+
+        protected void ApplyMode(string input)
+        {
+            if (input.Contains("-m ") || input.Contains(" -m "))
+            {
+                string foundMode = "";
+                if (input.Contains(" -m "))
+                {
+                    foundMode = input.Substring(input.IndexOf(" -m ", StringComparison.Ordinal) + " -m ".Length);
+                    input = input.Substring(0, input.IndexOf(" -m ", StringComparison.Ordinal));
+                }
+                else
+                {
+                    foundMode = input.Substring(input.IndexOf("-m ", StringComparison.Ordinal) + "-m ".Length);
+                    input = input.Substring(0, input.IndexOf("-m ", StringComparison.Ordinal));
+                }
+
+                switch (foundMode.ToLower())
+                {
+                    case "standard":
+                        _osuMode = OsuMode.Standard;
+                        break;
+                    case "mania":
+                        _osuMode = OsuMode.Mania;
+                        break;
+                    case "ctb":
+                    case "catch":
+                        _osuMode = OsuMode.Catch;
+                        break;
+                    case "taiko":
+                        _osuMode = OsuMode.Taiko;
+                        break;
+                    default:
+                        _osuMode = OsuMode.Standard;
+                        break;
+                }
+            }
+        }
+
+        protected void ApplyPlayer(ulong DiscordID, string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                InternalUser internalUser = DatabaseManager.Instance.GetUser(DiscordID);
+                if (!string.IsNullOrEmpty(internalUser.OsuUserID))
+                    _osuUser = OsuApi.GetUser(internalUser.OsuUserID, _osuMode);
+            }
+
+            if (_osuUser == null)
+            {
+                string username = HttpUtility.HtmlEncode(input); // Test value
+                _osuUser = OsuApi.GetUser(username, _osuMode);
+            }
+        }
     }
 }

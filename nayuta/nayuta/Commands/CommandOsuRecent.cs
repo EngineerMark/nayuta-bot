@@ -10,6 +10,9 @@ namespace nayuta.Commands
 
         public override object CommandHandler(SocketMessage socketMessage, string input)
         {
+            ApplyMode(input);
+            ApplyPlayer(socketMessage.Author.Id, input);
+            
             return "wip";
         }
     }
