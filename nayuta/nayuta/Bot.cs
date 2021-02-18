@@ -46,6 +46,7 @@ namespace nayuta
             _commandManager.RegisterCommand(new CommandSystem());
             _commandManager.RegisterCommand(new CommandOsuRegister());
             _commandManager.RegisterCommand(new CommandOsuProfile());
+            _commandManager.RegisterCommand(new CommandOsuRecent());
 
             _databaseManager = new DatabaseManager();
             _internalUserManager = new InternalUserManager();

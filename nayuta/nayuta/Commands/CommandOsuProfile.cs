@@ -19,7 +19,7 @@ namespace nayuta.Commands
 
         public override object CommandHandler(SocketMessage socketMessage, string input)
         {
-            ApplyMode(input);
+            input = ApplyMode(input);
             ApplyPlayer(socketMessage.Author.Id, input);
 
             //List<OsuUser> users = APIHelper<List<OsuUser>>.GetData(apiUrl + "get_user?u&k="+apiKey+"&u=" + username);

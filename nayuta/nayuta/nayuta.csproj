@@ -199,11 +199,13 @@
     <Compile Include="Internal\InternalUser.cs" />
     <Compile Include="Internal\InternalUserManager.cs" />
     <Compile Include="Manager.cs" />
+    <Compile Include="Osu\HitObject.cs" />
     <Compile Include="Osu\OsuApi.cs" />
     <Compile Include="Osu\OsuBeatmap.cs" />
     <Compile Include="Osu\OsuMode.cs" />
     <Compile Include="Osu\OsuMods.cs" />
     <Compile Include="Osu\OsuPlay.cs" />
+    <Compile Include="Osu\OsuPerformance.cs" />
     <Compile Include="Osu\OsuRanks.cs" />
     <Compile Include="Osu\OsuUser.cs" />
     <Compile Include="Program.cs" />

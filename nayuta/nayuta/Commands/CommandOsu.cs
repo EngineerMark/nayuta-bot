@@ -18,8 +18,11 @@ namespace nayuta.Commands
 
         public override abstract object CommandHandler(SocketMessage socketMessage, string input);
 
-        protected void ApplyMode(string input)
+        protected string ApplyMode(string input)
         {
+            _osuMode = OsuMode.Standard;
+            if (string.IsNullOrEmpty(input))
+                return input;
             if (input.Contains("-m ") || input.Contains(" -m "))
             {
                 string foundMode = "";
@@ -54,10 +57,12 @@ namespace nayuta.Commands
                         break;
                 }
             }
+            return input;
         }
 
         protected void ApplyPlayer(ulong DiscordID, string input)
         {
+            _osuUser = null;
             if (string.IsNullOrEmpty(input))
             {
                 InternalUser internalUser = DatabaseManager.Instance.GetUser(DiscordID);
