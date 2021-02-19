@@ -38,7 +38,7 @@ namespace nayuta.Commands
                     new EmbedFieldBuilder()
                     {
                         Name = "Beatmap Information",
-                        Value = "("+Mathf.Round(recentPlay.Beatmap.Starrating??0, 2)+"*) CS"+recentPlay.Beatmap.MapStats.CS + " • AR"+Mathf.Round(recentPlay.Beatmap.MapStats.AR, 2)+" • OD"+recentPlay.Beatmap.MapStats.OD+" • HP"+recentPlay.Beatmap.MapStats.HP+"\n" +
+                        Value = "("+Mathf.Round(recentPlay.Beatmap.Starrating??0, 2)+"*) CS"+Mathf.Round(recentPlay.Beatmap.MapStats.CS, 2) + " • AR"+Mathf.Round(recentPlay.Beatmap.MapStats.AR, 2)+" • OD"+Mathf.Round(recentPlay.Beatmap.MapStats.OD, 2)+" • HP"+Mathf.Round(recentPlay.Beatmap.MapStats.HP, 2)+"\n" +
                                 "Mapped by ["+recentPlay.Beatmap.Mapper+"](https://osu.ppy.sh/users/"+recentPlay.Beatmap.MapperID+")",
                         IsInline = false
                     },
