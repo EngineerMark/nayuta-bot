@@ -64,8 +64,16 @@ namespace nayuta.Osu
 
                     // AR bonus
                     float bonusAR = 0.0f;
-                    if (Beatmap.MapStats.AR > 10.33f)
-                        bonusAR += 0.4f * (Beatmap.MapStats.AR - 10.33f);
+                    
+                    // Prehotfix bonus AR (<Jan 16 2021)
+                    // if (Beatmap.MapStats.AR > 10.33f)
+                    //     bonusAR += 0.4f * (Beatmap.MapStats.AR - 10.33f);
+                    // else if (Beatmap.MapStats.AR < 8.0f)
+                    //     bonusAR += 0.1f * (8.0f - Beatmap.MapStats.AR);
+                    
+                    // New AR bonus
+                    if(Beatmap.MapStats.AR>10.33f)
+                        bonusAR+=0.2666f*Mathf.Min(1.0f, 1f/1000f*Beatmap.ObjectCount);
                     else if (Beatmap.MapStats.AR < 8.0f)
                         bonusAR += 0.1f * (8.0f - Beatmap.MapStats.AR);
 
