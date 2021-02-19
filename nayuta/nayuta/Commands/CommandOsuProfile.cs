@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using Humanizer;
 using Humanizer.Localisation;
 using nayuta.Internal;
+using nayuta.Math;
 using nayuta.Osu;
 
 namespace nayuta.Commands
@@ -42,7 +43,15 @@ namespace nayuta.Commands
                     topPlays.ForEach(play =>
                     {
                         i++;
-                        string stringified = "**" + i + ". " + play.GetInfo();
+                        string stringified = "**" + i + ". " + "[" + play.Beatmap.Title + " \\[" + play.Beatmap.DifficultyName +
+                                             "\\]](https://osu.ppy.sh/beatmaps/" + play.Beatmap.BeatmapID + ") +" +
+                                             ("" + ((OsuModsShort) play.Mods).ModParser() + "").Replace(", ", "") + "** (" +
+                                             Mathf.Round(play.Beatmap.Starrating??0, 1) + "\\*)\n" +
+                                             OsuRanks.GetEmojiFromRank(play.Rank).ToString() + " • **" +
+                                             Mathf.Round(play.Performance.CurrentValue).FormatNumber() + "pp** • " + Mathf.Round(play.Accuracy, 2) + "% • " +
+                                             play.MaxCombo + (play.Beatmap.MaxCombo!=null?"/"+play.Beatmap.MaxCombo:"x")  + (play.IsFullcombo == "1" ? " FC" : "") + " • " +
+                                             play.Score.FormatNumber() + "\n" +
+                                             "Achieved " + DateTime.Parse(play.DateAchieved).Humanize();
                         topPlayString += stringified + "\n";
                     });
                     topplayField.Value = topPlayString;
@@ -68,31 +77,23 @@ namespace nayuta.Commands
                         new EmbedFieldBuilder()
                         {
                             Name = "Performance",
-                            Value = Math.Round(_osuUser.Performance).FormatNumber() + "pp",
+                            Value = Mathf.Round(_osuUser.Performance).FormatNumber() + "pp",
                             IsInline = true
                         },
                         new EmbedFieldBuilder()
                         {
                             Name = "Level",
-                            Value = Math.Floor(_osuUser.Level) + " (" +
-                                    Math.Round((Math.Round(_osuUser.Level, 2) - Math.Floor(_osuUser.Level)) * 100) +
-                                    "% to level " + (Math.Ceiling(_osuUser.Level)) + ")",
+                            Value = Mathf.Floor(_osuUser.Level) + " (" +
+                                    Mathf.Round((Mathf.Round(_osuUser.Level, 2) - Mathf.Floor(_osuUser.Level)) * 100) +
+                                    "% to level " + (Mathf.Ceil(_osuUser.Level)) + ")",
                             IsInline = true
                         },
-                        EmbedHelper.BlankField,
                         new EmbedFieldBuilder()
                         {
                             Name = "Ranked Score",
                             Value = _osuUser.RankedScore.FormatNumber(),
                             IsInline = true
                         },
-                        new EmbedFieldBuilder()
-                        {
-                            Name = "Total Score",
-                            Value = _osuUser.TotalScore.FormatNumber(),
-                            IsInline = true
-                        },
-                        EmbedHelper.BlankField,
                         new EmbedFieldBuilder()
                         {
                             Name = "Playtime",
@@ -105,7 +106,20 @@ namespace nayuta.Commands
                             Value = _osuUser.Playcount.FormatNumber(),
                             IsInline = true
                         },
-                        EmbedHelper.BlankField,
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "Total Score",
+                            Value = _osuUser.TotalScore.FormatNumber(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "Ranks",
+                            Value = OsuRanks.GetEmojiFromRank("X")+" "+_osuUser.GetCountRankSS().FormatNumber()+" " +
+                                    "• "+OsuRanks.GetEmojiFromRank("S")+" "+_osuUser.GetCountRankS().FormatNumber()+" " +
+                                    "• "+OsuRanks.GetEmojiFromRank("A")+" "+_osuUser.GetCountRankA().FormatNumber(),
+                            IsInline = false
+                        },
                         topplayField
                     },
                     Footer = new EmbedFooterBuilder()

@@ -1,4 +1,7 @@
-﻿using HtmlAgilityPack;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 
 namespace nayuta.Osu
@@ -56,7 +59,27 @@ namespace nayuta.Osu
         
         [JsonProperty("playcount")]
         public int Playcount { get; set; }
+
+        [JsonProperty("count_rank_ss")] 
+        public int CountRankSS { get; set; }
         
+        [JsonProperty("count_rank_ssh")] 
+        public int CountRankSSH { get; set; }
+        
+        [JsonProperty("count_rank_s")] 
+        public int CountRankS { get; set; }
+        
+        [JsonProperty("count_rank_sh")] 
+        public int CountRankSH { get; set; }
+        
+        [JsonProperty("count_rank_a")] 
+        public int CountRankA { get; set; }
+
+        public int GetCountRankSS() => CountRankSS + CountRankSSH;
+        public int GetCountRankS() => CountRankS + CountRankSH;
+        public int GetCountRankA() => CountRankA;
+
+
         public Userpage Userpage { get; set; }
 
         public void SetUserpage()
@@ -70,7 +93,7 @@ namespace nayuta.Osu
             var htmlBody = doc.DocumentNode.SelectSingleNode("//body");
             
             //Playhistory
-            var graphNodes = doc.DocumentNode.SelectNodes("//g[@class='line-chart__axis--x']");
+            HtmlNodeCollection graphNodes = doc.DocumentNode.SelectNodes("//g[@class='line-chart__axis line-chart__axis--x']");
             
             foreach (HtmlNode node in graphNodes)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using nayuta.Math;
 
 namespace nayuta.Osu
 {
@@ -65,6 +66,7 @@ namespace nayuta.Osu
             {
                 maps[0].Mode = mode;
                 maps[0].Mods = mods;
+                maps[0].MapStats = new MapStats(maps[0], mods);
             }
 
             return maps.Count > 0 ? maps[0] : null;
@@ -105,11 +107,14 @@ namespace nayuta.Osu
         {
             float value = baseValue;
             float limit = CalculateDifficultyLimit(mods);
+            
+            if ((mods & OsuMods.HardRock) != 0)
+                value *= 1.4f;
 
             if ((mods & OsuMods.Easy) != 0)
                 value *= 0.5f;
 
-            return Math.Max(Math.Min(value, limit), 0);
+            return Mathf.Max(Mathf.Min(value, limit), 0);
         }
 
         public static float CalculateAccuracy(OsuMode mode, float cMiss, float c50, float c100, float c300,

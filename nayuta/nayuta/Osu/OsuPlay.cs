@@ -22,11 +22,23 @@ namespace nayuta.Osu
 
         [JsonProperty("rank")] public string Rank { get; set; }
 
-        [JsonProperty("pp")] public float Performance { get; set; }
+        [JsonProperty("pp")] public float PP { get; set; } = -1;
+
+        [JsonIgnore] private OsuPerformance _pp;
+
+        public OsuPerformance Performance
+        {
+            get
+            {
+                if (_pp == null)
+                    _pp = new OsuPerformance(this, Beatmap);
+                return _pp;
+            }
+        }
 
         [JsonProperty("enabled_mods")] public OsuMods Mods { get; set; }
 
-        [JsonProperty("maxcombo")] public string MaxCombo { get; set; }
+        [JsonProperty("maxcombo")] public float MaxCombo { get; set; } = 0;
 
         [JsonProperty("perfect")] public string IsFullcombo { get; set; }
 
@@ -47,28 +59,5 @@ namespace nayuta.Osu
         [JsonIgnore] public float Accuracy => OsuApi.CalculateAccuracy(Mode, CMiss, C50, C100, C300, CKatu, CGeki);
 
         [JsonIgnore] public OsuBeatmap Beatmap { get; set; }
-
-        public string GetInfo(ResultMode resultMode = ResultMode.Short)
-        {
-            string result = "";
-            switch (resultMode)
-            {
-                case ResultMode.Short:
-                    result = "[" + Beatmap.Title + " \\[" + Beatmap.DifficultyName +
-                             "\\]](https://osu.ppy.sh/beatmaps/" + Beatmap.BeatmapID + ") +" +
-                             ("" + ((OsuModsShort) Mods).ModParser() + "").Replace(", ", "") + "** (" +
-                             Math.Round(Beatmap.Starrating, 1) + "\\*)\n" +
-                             OsuRanks.GetEmojiFromRank(Rank).ToString() + " • **" +
-                             Math.Round(Performance).FormatNumber() + "pp** • " + Math.Round(Accuracy, 2) + "% • " +
-                             MaxCombo + "/" + Beatmap.MaxCombo + (IsFullcombo == "1" ? " FC" : "") + " • " +
-                             Score.FormatNumber() + "\n" +
-                             "Achieved " + DateTime.Parse(DateAchieved).Humanize();
-                    break;
-                case ResultMode.Expansive:
-                    break;
-            }
-
-            return result;
-        }
     }
 }

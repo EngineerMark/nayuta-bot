@@ -1,5 +1,6 @@
 ﻿using System;
 using Discord.WebSocket;
+using nayuta.Math;
 
 namespace nayuta.Commands
 {
@@ -11,7 +12,7 @@ namespace nayuta.Commands
 
         public override object CommandHandler(SocketMessage socketMessage, string input)
         {
-            return "Pong ("+ Math.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
+            return "Pong ("+ Mathf.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
                                       socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms)";
         }
     }

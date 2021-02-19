@@ -199,7 +199,9 @@
     <Compile Include="Internal\InternalUser.cs" />
     <Compile Include="Internal\InternalUserManager.cs" />
     <Compile Include="Manager.cs" />
+    <Compile Include="Math\Mathf.cs" />
     <Compile Include="Osu\HitObject.cs" />
+    <Compile Include="Osu\MapStats.cs" />
     <Compile Include="Osu\OsuApi.cs" />
     <Compile Include="Osu\OsuBeatmap.cs" />
     <Compile Include="Osu\OsuMode.cs" />

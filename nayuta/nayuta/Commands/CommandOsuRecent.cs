@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Discord;
 using Discord.WebSocket;
+using nayuta.Math;
 using nayuta.Osu;
 
 namespace nayuta.Commands
@@ -37,14 +38,14 @@ namespace nayuta.Commands
                     new EmbedFieldBuilder()
                     {
                         Name = "Beatmap Information",
-                        Value = "("+Math.Round(recentPlay.Beatmap.Starrating, 2)+"*) CS"+recentPlay.Beatmap.CS + " • AR"+Math.Round(recentPlay.Beatmap.AR, 2)+" • OD"+recentPlay.Beatmap.OD+" • HP"+recentPlay.Beatmap.HP+"\n" +
+                        Value = "("+Mathf.Round(recentPlay.Beatmap.Starrating??0, 2)+"*) CS"+recentPlay.Beatmap.MapStats.CS + " • AR"+Mathf.Round(recentPlay.Beatmap.MapStats.AR, 2)+" • OD"+recentPlay.Beatmap.MapStats.OD+" • HP"+recentPlay.Beatmap.MapStats.HP+"\n" +
                                 "Mapped by ["+recentPlay.Beatmap.Mapper+"](https://osu.ppy.sh/users/"+recentPlay.Beatmap.MapperID+")",
                         IsInline = false
                     },
                     new EmbedFieldBuilder()
                     {
                         Name = "Play Information",
-                        Value = OsuRanks.GetEmojiFromRank(recentPlay.Rank).ToString()+" "+Math.Round(recentPlay.Accuracy, 2)+"%",
+                        Value = OsuRanks.GetEmojiFromRank(recentPlay.Rank).ToString()+" "+Mathf.Round(recentPlay.Accuracy, 2)+"% • "+Mathf.Round(recentPlay.Performance.CurrentValue, 2)+"pp "+recentPlay.MaxCombo + "/" + recentPlay.Beatmap.MaxCombo+" "+((recentPlay.IsFullcombo=="1"?"":"(For FC: "+Mathf.Round(recentPlay.Performance.CurrentValueIfFC, 2)+"pp)")),
                         IsInline = false
                     }
                 }

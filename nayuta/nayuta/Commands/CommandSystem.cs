@@ -4,6 +4,7 @@ using System.Linq;
 using System.Management;
 using Discord;
 using Discord.WebSocket;
+using nayuta.Math;
 
 namespace nayuta.Commands
 {
@@ -73,7 +74,7 @@ namespace nayuta.Commands
             DateTime dt2 = DateTime.Now;
 
             //To Calculate Speed in Kb Divide Value Of data by 1024 And Then by End Time Subtract Start Time To Know Download Per Second.
-            return Math.Round(((data.Length / 1024) / (dt2 - dt1).TotalSeconds)/1024)+"mbps";
+            return Mathf.Round((float)(((data.Length / 1024) / (dt2 - dt1).TotalSeconds)/1024))+"mbps";
         }
     }
 }
