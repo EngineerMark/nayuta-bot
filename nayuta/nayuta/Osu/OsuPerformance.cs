@@ -110,11 +110,8 @@ namespace nayuta.Osu
                     }
 
                     float bonusAcc = 0.5f + real_acc / 2.0f;
-                    float squaredOD = Mathf.Pow(Beatmap.MapStats.OD, 2f);
-                    float bonusOD = 0.98f + squaredOD / 2500f;
 
                     aim *= bonusAcc;
-                    aim *= bonusOD;
 
                     AimPP = aim;
 
@@ -129,9 +126,12 @@ namespace nayuta.Osu
                     if (Beatmap.MapStats.AR > 10.33f)
                         speed *= bonusAR;
                     speed *= bonusHD;
-                    speed *= (0.95f + squaredOD / 750f) *
-                             Mathf.Pow(real_acc, (14.5f - Mathf.Max(Beatmap.MapStats.OD, 8f)) / 2f);
+                    float squaredOD = Mathf.Pow(Beatmap.MapStats.OD, 2f);
+                    float bonusOD = (0.95f + squaredOD / 750f) *
+                                    Mathf.Pow(real_acc, (14.5f - Mathf.Max(Beatmap.MapStats.OD, 8f)) / 2f);
 
+                    speed *= bonusOD;
+                    
                     SpeedPP = speed;
                     
                     float acc = (Mathf.Pow(1.52163f, Beatmap.MapStats.OD)*Mathf.Pow(real_acc, 24.0f)*2.83f);
@@ -144,8 +144,8 @@ namespace nayuta.Osu
                     AccPP = acc;
 
                     float final_multiplier = 1.12f;
-                    if ((Play.Mods & OsuMods.NoFail) != 0)
-                        final_multiplier *= Mathf.Max(0.9f, 1.0f - 0.02f * cMiss);
+                     if ((Play.Mods & OsuMods.NoFail) != 0)
+                         final_multiplier *= Mathf.Max(0.9f, 1.0f - 0.02f * cMiss);
                     if ((Play.Mods & OsuMods.SpunOut) != 0)
                         final_multiplier *= 1.0f - Mathf.Pow((float)Beatmap.SpinnerCount / (float)Beatmap.ObjectCount, 0.85f);
 
