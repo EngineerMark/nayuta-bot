@@ -44,6 +44,7 @@ namespace nayuta
             _commandManager.RegisterCommand(new CommandPing());
             _commandManager.RegisterCommand(new CommandEcchi());
             _commandManager.RegisterCommand(new CommandSystem());
+            _commandManager.RegisterCommand(new CommandWeather());
             _commandManager.RegisterCommand(new CommandOsuRegister());
             _commandManager.RegisterCommand(new CommandOsuProfile());
             _commandManager.RegisterCommand(new CommandOsuRecent());

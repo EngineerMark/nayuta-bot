@@ -216,6 +216,8 @@
     <Compile Include="Modules\Osu\OsuPlay.cs" />
     <Compile Include="Modules\Osu\OsuRanks.cs" />
     <Compile Include="Modules\Osu\OsuUser.cs" />
+    <Compile Include="Modules\Weather\WeatherApi.cs" />
+    <Compile Include="Modules\Weather\WeatherData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringHelper.cs" />
@@ -223,9 +225,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
