@@ -19,6 +19,18 @@ In the meanwhile you can look in DatabaseManager.cs for most of the information 
 This is a personal project. Don't expect enterprise-style support, help and development. I am doing stuff my way, but keeping it open source.
 To see upcoming features and in development material, refer to the links at the bottom.
 
+It's recommended to have two seperate bots, one for the main stable branch and one for the development branch (mainly mark).
+You can use preprocessors to switch between the two easily using Debug/Release build modes.
+
+```cs
+#if DEBUG
+  DiscordToken = "DebugBotToken";
+#else
+  DiscordToken = "ReleaseBotToken";
+#endif
+```
+The above is supported by atleast Visual Studio and Rider. Don't ask me about other compilers, just test it out.
+
 ## Used packages
 
 [Discord.Net 2.3.0](https://www.nuget.org/packages/Discord.Net/)
