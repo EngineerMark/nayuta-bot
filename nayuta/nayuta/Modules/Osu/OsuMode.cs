@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     [Flags]
     public enum OsuMode

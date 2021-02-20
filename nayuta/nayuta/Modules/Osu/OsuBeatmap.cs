@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     public class OsuBeatmap
     {

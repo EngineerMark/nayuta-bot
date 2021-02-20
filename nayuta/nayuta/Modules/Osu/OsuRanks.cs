@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Discord;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     public class OsuRanks
     {

@@ -7,7 +7,7 @@ using Humanizer;
 using Humanizer.Localisation;
 using nayuta.Internal;
 using nayuta.Math;
-using nayuta.Osu;
+using nayuta.Modules.Osu;
 
 namespace nayuta.Commands
 {

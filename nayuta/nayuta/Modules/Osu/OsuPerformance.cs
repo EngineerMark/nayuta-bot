@@ -1,7 +1,7 @@
 ﻿using System;
 using nayuta.Math;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     /// <summary>
     /// Base class for PP handling

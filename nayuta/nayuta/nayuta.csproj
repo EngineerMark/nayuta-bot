@@ -204,17 +204,17 @@
     <Compile Include="Internal\InternalUserManager.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Math\Mathf.cs" />
-    <Compile Include="Osu\BeatmapStatus.cs" />
-    <Compile Include="Osu\HitObject.cs" />
-    <Compile Include="Osu\MapStats.cs" />
-    <Compile Include="Osu\OsuApi.cs" />
-    <Compile Include="Osu\OsuBeatmap.cs" />
-    <Compile Include="Osu\OsuMode.cs" />
-    <Compile Include="Osu\OsuMods.cs" />
-    <Compile Include="Osu\OsuPlay.cs" />
-    <Compile Include="Osu\OsuPerformance.cs" />
-    <Compile Include="Osu\OsuRanks.cs" />
-    <Compile Include="Osu\OsuUser.cs" />
+    <Compile Include="Modules\Osu\BeatmapStatus.cs" />
+    <Compile Include="Modules\Osu\HitObject.cs" />
+    <Compile Include="Modules\Osu\MapStats.cs" />
+    <Compile Include="Modules\Osu\OsuApi.cs" />
+    <Compile Include="Modules\Osu\OsuBeatmap.cs" />
+    <Compile Include="Modules\Osu\OsuMode.cs" />
+    <Compile Include="Modules\Osu\OsuMods.cs" />
+    <Compile Include="Modules\Osu\OsuPerformance.cs" />
+    <Compile Include="Modules\Osu\OsuPlay.cs" />
+    <Compile Include="Modules\Osu\OsuRanks.cs" />
+    <Compile Include="Modules\Osu\OsuUser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringHelper.cs" />
@@ -222,6 +222,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,6 +1,6 @@
 ﻿using Discord.WebSocket;
 using nayuta.Internal;
-using nayuta.Osu;
+using nayuta.Modules.Osu;
 
 namespace nayuta.Commands
 {

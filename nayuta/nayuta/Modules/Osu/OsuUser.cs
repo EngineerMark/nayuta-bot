@@ -4,7 +4,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     public struct Userpage
     {

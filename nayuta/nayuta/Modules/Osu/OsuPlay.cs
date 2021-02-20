@@ -2,7 +2,7 @@
 using Humanizer;
 using Newtonsoft.Json;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     public class OsuPlay
     {

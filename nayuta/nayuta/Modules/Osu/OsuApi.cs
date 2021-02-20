@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Discord;
 using nayuta.Math;
 
-namespace nayuta.Osu
+namespace nayuta.Modules.Osu
 {
     public static class OsuApi
     {

@@ -3,7 +3,7 @@ using System.Web;
 using Discord.WebSocket;
 using Humanizer;
 using nayuta.Internal;
-using nayuta.Osu;
+using nayuta.Modules.Osu;
 
 namespace nayuta.Commands
 {

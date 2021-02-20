@@ -5,7 +5,7 @@ using Discord;
 using Discord.WebSocket;
 using Humanizer;
 using nayuta.Math;
-using nayuta.Osu;
+using nayuta.Modules.Osu;
 
 namespace nayuta.Commands
 {

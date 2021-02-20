@@ -1,4 +1,4 @@
-﻿namespace nayuta.Osu
+﻿namespace nayuta.Modules.Osu
 {
     public class HitObject
     {
