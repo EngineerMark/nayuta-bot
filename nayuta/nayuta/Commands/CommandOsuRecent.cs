@@ -31,7 +31,7 @@ namespace nayuta.Commands
             
             EmbedBuilder embed = new EmbedBuilder()
             {
-                Title = "Most recent play by "+_osuUser.Name,
+                Title = "Most recent play by **"+_osuUser.Name+"** in osu!"+_osuMode,
                 Description = "["+recentPlay.Beatmap.Artist+" - "+recentPlay.Beatmap.Title+" \\["+recentPlay.Beatmap.DifficultyName+"\\]](https://osu.ppy.sh/beatmaps/"+recentPlay.Beatmap.BeatmapID+")\n" +
                               "Map status: "+ OsuApi.BeatmapStatusEmotes[recentPlay.Beatmap.Status].ToString() + " " + recentPlay.Beatmap.Status.ToString(),
                 ThumbnailUrl = "https://b.ppy.sh/thumb/"+recentPlay.Beatmap.BeatmapSetID+"l.jpg",
