@@ -39,6 +39,9 @@ namespace nayuta.Osu
 
         public float CalculatePerformance(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0, float cGeki = 0)
         {
+            if ((Play.Mods & OsuMods.ScoreV2) != 0)
+                return 0f;
+            
             switch (Play.Mode)
             {
                 case OsuMode.Catch:
