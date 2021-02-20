@@ -9,6 +9,9 @@ namespace nayuta.Osu
         
         public OsuMods Mods { get; set; }
         
+        [JsonProperty("mode")]
+        public OsuMode OriginalMode { get; set; }
+        
         [JsonProperty("beatmapset_id")]
         public string BeatmapSetID { get; set; }
         

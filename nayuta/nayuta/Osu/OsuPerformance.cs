@@ -44,6 +44,7 @@ namespace nayuta.Osu
                 case OsuMode.Catch:
                     return CalculateCatchPP(combo, c50, c100, c300, cMiss, cKatu, cGeki);
                 case OsuMode.Mania:
+                    return CalculateManiaPP(combo, c50, c100, c300, cMiss, cKatu, cGeki);
                 case OsuMode.Taiko:
                     //Tbd
                     return 0f;
@@ -52,6 +53,71 @@ namespace nayuta.Osu
             }
 
             return 0f;
+        }
+
+        public float CalculateManiaPP(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0,
+            float cGeki = 0)
+        {
+            if ((Play.Mods & OsuMods.Relax) != 0 || (Play.Mods & OsuMods.Relax2) != 0 ||
+                (Play.Mods & OsuMods.Autoplay) != 0)
+                return 0f;
+
+            float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki);
+
+            float strainbase = Mathf.Pow(5.0f * Mathf.Max(1f, (float) Beatmap.Starrating / 0.2f) - 4f, 2.2f) / 135.0f;
+            strainbase *= 1f + 0.1f * Mathf.Min(1f, (float) Beatmap.ObjectCount / 1500f);
+
+            float strain = strainbase;
+            float scoreMultiplier = 0;
+            if (Play.Score < 500000)
+                scoreMultiplier = Play.Score / 500000f * 0.1f;
+            else if (Play.Score < 600000)
+                scoreMultiplier = (Play.Score - 500000f) / 100000f * 0.3f;
+            else if (Play.Score < 700000)
+                scoreMultiplier = (Play.Score - 600000f) / 100000f * 0.25f+0.3f;
+            else if (Play.Score < 800000)
+                scoreMultiplier = (Play.Score - 700000f) / 100000f * 0.2f+0.55f;
+            else if (Play.Score < 900000)
+                scoreMultiplier = (Play.Score - 800000f) / 100000f * 0.15f+0.75f;
+            else
+                scoreMultiplier = (Play.Score - 900000f) / 100000f * 0.1f+0.9f;
+            
+
+            // float[][] odconvertwindow = new float[2][]
+            // {
+            //     new float[2] {47, 34},
+            //     new float[2] {65, 47}
+            // };
+            //
+            // float odwindow = ((Beatmap.OriginalMode == OsuMode.Standard)) ? odconvertwindow[((Play.Mods&OsuMods.Easy)!=0)?1:0][(Beatmap.MapStats.OD>=5)?1:0]:((64f-3f*Beatmap.MapStats.OD)* (((Play.Mods & OsuMods.Easy) != 0) ? 1.4f : 1f));
+            //
+            // float acc = Mathf.Max(0.0f, 0.2f - ((odwindow - 34f) * 0.006667f)) * strain;
+            // acc *= Mathf.Pow(Mathf.Max(0.0f, (Play.Score - 960000f)) / 40000.0f, 1.1f);
+
+            float acc = 1.0f;
+            float nerfod = ((Play.Mods & OsuMods.Easy) != 0) ? 0.5f : 1.0f;
+            if (Play.Score >= 960000)
+                acc = Beatmap.MapStats.OD * nerfod * 0.02f * strainbase *
+                      Mathf.Pow((Play.Score - 960000f) / 40000f, 1.1f);
+            else
+                acc = 0;
+
+            float total = 0.73f;
+
+            if ((Play.Mods & OsuMods.NoFail) != 0)
+                total *= 0.9f;
+            
+            if ((Play.Mods & OsuMods.SpunOut) != 0)
+                total *= 0.95f;
+            
+            if ((Play.Mods & OsuMods.Easy) != 0)
+                total *= 0.5f;
+            
+            return total*Mathf.Pow(
+                Mathf.Pow(strain*scoreMultiplier, 1.1f)+
+                Mathf.Pow(acc, 1.1f),
+                1.0f/1.1f
+                )*1.1f;
         }
 
         public float CalculateCatchPP(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0, float cGeki = 0)

@@ -1,5 +1,8 @@
-﻿namespace nayuta.Osu
+﻿using System;
+
+namespace nayuta.Osu
 {
+    [Flags]
     public enum OsuMode
     {
         Standard = 0,
