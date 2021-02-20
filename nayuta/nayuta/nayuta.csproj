@@ -177,6 +177,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIHelper.cs" />
+    <Compile Include="APIKeys.cs" />
+    <Compile Include="APIKeysLocal.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandArguments.cs" />

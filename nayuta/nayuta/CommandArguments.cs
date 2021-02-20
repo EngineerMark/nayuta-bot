@@ -28,9 +28,9 @@ namespace nayuta
             //int c = matches.Count;
             LeftOverCommand = input;
 
+            ArgumentValues = new Dictionary<string, string>();
             if (matches != null && matches.Count > 0)
             {
-                ArgumentValues = new Dictionary<string, string>();
                 foreach (Match match in matches)
                 {
                     string value = match.Value;

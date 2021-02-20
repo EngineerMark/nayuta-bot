@@ -21,7 +21,7 @@ namespace nayuta
         {
             yielder = new Yielder();
             
-            Bot bot = new Bot("ODA5OTEyMTUzNTgyNzMxMzI0.YCb_eA.E6W2dgDkUrcO1ptZvlnPMX2yo3w", "n!");
+            Bot bot = new Bot(APIKeys.DiscordToken, "n!");
 
             updateThread = new Thread(new ThreadStart(Update));
             updateThread.Start();

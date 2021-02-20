@@ -7,7 +7,6 @@ namespace nayuta.Osu
 {
     public static class OsuApi
     {
-        private static string apiKey = "c8186625bb3684645cd6e46325fe17c59537e54c";
         private static string apiUrl = "https://osu.ppy.sh/api/";
 
         public static Dictionary<BeatmapStatus, Emoji> BeatmapStatusEmotes = new Dictionary<BeatmapStatus, Emoji>()
@@ -24,7 +23,7 @@ namespace nayuta.Osu
         {
             List<OsuUser> users =
                 APIHelper<List<OsuUser>>.GetData(
-                    apiUrl + "get_user?k=" + apiKey + "&u=" + username + "&m=" + (int) mode);
+                    apiUrl + "get_user?k=" + APIKeys.OsuAPIKey + "&u=" + username + "&m=" + (int) mode);
             if (users.Count > 0)
             {
                 //users[0].SetUserpage();
@@ -43,7 +42,7 @@ namespace nayuta.Osu
         public static List<OsuPlay> GetUserBest(string username, OsuMode mode = OsuMode.Standard, int limit = 5,
             bool generateBeatmaps = false)
         {
-            List<OsuPlay> plays = APIHelper<List<OsuPlay>>.GetData(apiUrl + "get_user_best?k=" + apiKey + "&u=" +
+            List<OsuPlay> plays = APIHelper<List<OsuPlay>>.GetData(apiUrl + "get_user_best?k=" + APIKeys.OsuAPIKey + "&u=" +
                                                                    username + "&m=" + (int) mode + "&limit=" + limit);
             plays.ForEach(play =>
             {
@@ -57,7 +56,7 @@ namespace nayuta.Osu
         public static List<OsuPlay> GetUserRecent(string username, OsuMode mode = OsuMode.Standard, int limit = 1,
             bool generateBeatmaps = false)
         {
-            List<OsuPlay> plays = APIHelper<List<OsuPlay>>.GetData(apiUrl + "get_user_recent?k=" + apiKey + "&u=" +
+            List<OsuPlay> plays = APIHelper<List<OsuPlay>>.GetData(apiUrl + "get_user_recent?k=" + APIKeys.OsuAPIKey + "&u=" +
                                                                    username + "&m=" + (int) mode + "&limit=" + limit);
             plays.ForEach(play =>
             {
@@ -70,7 +69,7 @@ namespace nayuta.Osu
 
         public static OsuBeatmap GetBeatmap(string id, OsuMods mods = OsuMods.None, OsuMode mode = OsuMode.Standard)
         {
-            string url = apiUrl + "get_beatmaps?k=" + apiKey + "&b=" + id + "&m=" + (int) mode + "&a=1&mods=" +
+            string url = apiUrl + "get_beatmaps?k=" + APIKeys.OsuAPIKey + "&b=" + id + "&m=" + (int) mode + "&a=1&mods=" +
                          (int) mods.ModParser(true);
             List<OsuBeatmap> maps = APIHelper<List<OsuBeatmap>>.GetData(url, true);
             if (maps.Count > 0)
