@@ -2,6 +2,23 @@
 
 Nayuta Kani is a Discord Bot primarily made to give users data of certain games or statistics.
 
+## Important
+
+For all builds, a sqlite database is required for the bot to function currently.
+Currently, the structure is as followed:
+
+| Datatables | | | |
+| --- | --- | --- | --- |
+| users | id INT (primary, autoincrement) | discord_id TEXT | osu_id TEXT |
+
+The database has to reside as `database.db` in the root application folder, under the .exe basically.
+
+Since this is pretty important, I will try to keep this as up to date as possible. If however the last update in the README is much older than the development branch (or main, whichever you prefer to work off), please open an issue and I will update it.
+In the meanwhile you can look in DatabaseManager.cs for most of the information in such case.
+
+This is a personal project. Don't expect enterprise-style support, help and development. I am doing stuff my way, but keeping it open source.
+To see upcoming features and in development material, refer to the links at the bottom.
+
 ## Used packages
 
 [Discord.Net 2.3.0](https://www.nuget.org/packages/Discord.Net/)
@@ -41,3 +58,6 @@ When stuff is missing, just open an issue and I will deal with it within reasona
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Links
+[Trello Board](https://trello.com/b/Sgk7Slsh/nayuta)
