@@ -192,6 +192,7 @@
     <Compile Include="Commands\CommandOsuTop.cs" />
     <Compile Include="Commands\CommandPing.cs" />
     <Compile Include="Commands\CommandSystem.cs" />
+    <Compile Include="Commands\CommandWeather.cs" />
     <Compile Include="Coroutine\Coroutine.cs" />
     <Compile Include="Coroutine\IWait.cs" />
     <Compile Include="Coroutine\WaitFor.cs" />
