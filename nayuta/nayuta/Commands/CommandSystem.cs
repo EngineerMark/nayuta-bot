@@ -20,7 +20,7 @@ namespace nayuta.Commands
 
         }
         
-        public override object CommandHandler(SocketMessage socketMessage, string input)
+        public override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments)
         {
             SelectQuery cpuQuery = new SelectQuery("Win32_Processor");
             SelectQuery gpuQuery = new SelectQuery("Win32_VideoController");

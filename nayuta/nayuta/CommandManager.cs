@@ -44,9 +44,12 @@ namespace nayuta
             if (user == null)
                 user = new InternalUser() {DiscordID = socketMessage.Author.Id.ToString(),IsNewUser = true};
             
+            CommandArguments arguments = new CommandArguments(parsedMessage);
+            parsedMessage = arguments.LeftOverCommand;
+
             foreach (Command command in commands)
             {
-                dynamic status = command.Handle(socketMessage);
+                dynamic status = command.Handle(socketMessage, parsedMessage, arguments);
                 bool success = true;
                 
                 if (status.GetType().Equals(typeof(string)))

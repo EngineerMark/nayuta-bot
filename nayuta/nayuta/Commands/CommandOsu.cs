@@ -16,28 +16,15 @@ namespace nayuta.Commands
         {
         }
 
-        public override abstract object CommandHandler(SocketMessage socketMessage, string input);
+        public override abstract object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments);
 
-        protected string ApplyMode(string input)
+        protected void ApplyMode(CommandArguments args)
         {
             _osuMode = OsuMode.Standard;
-            if (string.IsNullOrEmpty(input))
-                return input;
-            if (input.Contains("-m ") || input.Contains(" -m "))
-            {
-                string foundMode = "";
-                if (input.Contains(" -m "))
-                {
-                    foundMode = input.Substring(input.IndexOf(" -m ", StringComparison.Ordinal) + " -m ".Length);
-                    input = input.Substring(0, input.IndexOf(" -m ", StringComparison.Ordinal));
-                }
-                else
-                {
-                    foundMode = input.Substring(input.IndexOf("-m ", StringComparison.Ordinal) + "-m ".Length);
-                    input = input.Substring(0, input.IndexOf("-m ", StringComparison.Ordinal));
-                }
 
-                switch (foundMode.ToLower())
+            if (args.Get("m") != null)
+            {
+                switch (args.Get("m"))
                 {
                     case "standard":
                         _osuMode = OsuMode.Standard;
@@ -57,7 +44,44 @@ namespace nayuta.Commands
                         break;
                 }
             }
-            return input;
+            
+            // if (string.IsNullOrEmpty(input))
+            //     return input;
+            // if (input.Contains("-m ") || input.Contains(" -m "))
+            // {
+            //     string foundMode = "";
+            //     if (input.Contains(" -m "))
+            //     {
+            //         foundMode = input.Substring(input.IndexOf(" -m ", StringComparison.Ordinal) + " -m ".Length);
+            //         input = input.Substring(0, input.IndexOf(" -m ", StringComparison.Ordinal));
+            //     }
+            //     else
+            //     {
+            //         foundMode = input.Substring(input.IndexOf("-m ", StringComparison.Ordinal) + "-m ".Length);
+            //         input = input.Substring(0, input.IndexOf("-m ", StringComparison.Ordinal));
+            //     }
+            //
+            //     switch (foundMode.ToLower())
+            //     {
+            //         case "standard":
+            //             _osuMode = OsuMode.Standard;
+            //             break;
+            //         case "mania":
+            //             _osuMode = OsuMode.Mania;
+            //             break;
+            //         case "ctb":
+            //         case "catch":
+            //             _osuMode = OsuMode.Catch;
+            //             break;
+            //         case "taiko":
+            //             _osuMode = OsuMode.Taiko;
+            //             break;
+            //         default:
+            //             _osuMode = OsuMode.Standard;
+            //             break;
+            //     }
+            // }
+            // return input;
         }
 
         protected void ApplyPlayer(ulong DiscordID, string input)

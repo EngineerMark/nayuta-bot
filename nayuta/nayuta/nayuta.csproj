@@ -179,6 +179,7 @@
     <Compile Include="APIHelper.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="CommandArguments.cs" />
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\CommandEcchi.cs" />
     <Compile Include="Commands\CommandHelp.cs" />

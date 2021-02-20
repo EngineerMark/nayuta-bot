@@ -24,7 +24,7 @@ namespace nayuta.Commands
             apiUrl = "https://danbooru.donmai.us/posts/random.json?login=" + danbooruUser + "&api_key=" + danbooruApiKey;
         }
 
-        public override object CommandHandler(SocketMessage socketMessage, string input)
+        public override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments)
         {
             List<string> inputArray = input.Split(' ').ToList();
             inputArray = inputArray.Select(s=>

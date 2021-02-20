@@ -10,7 +10,7 @@ namespace nayuta.Commands
         {
         }
 
-        public override object CommandHandler(SocketMessage socketMessage, string input)
+        public override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments)
         {
             return "Pong ("+ Mathf.Abs(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() -
                                       socketMessage.CreatedAt.ToUnixTimeMilliseconds())+"ms)";

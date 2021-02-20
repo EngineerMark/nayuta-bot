@@ -11,7 +11,7 @@ namespace nayuta.Commands
             InputValue = true;
         }
 
-        public override object CommandHandler(SocketMessage socketMessage, string input)
+        public override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments)
         {
             if (string.IsNullOrEmpty(input) || input.Length<=3)
                 return "Please enter a username to connect to";

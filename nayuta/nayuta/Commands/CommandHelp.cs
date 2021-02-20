@@ -10,7 +10,7 @@ namespace nayuta.Commands
         {
         }
 
-        public override object CommandHandler(SocketMessage socketMessage, string input)
+        public override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments)
         {
             EmbedFieldBuilder commandList = new EmbedFieldBuilder();
             commandList.Name = "Commands";

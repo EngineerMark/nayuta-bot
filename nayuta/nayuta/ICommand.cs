@@ -4,6 +4,6 @@ namespace nayuta
 {
     public interface ICommand
     {
-        object CommandHandler(SocketMessage socketMessage, string input);
+        object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments);
     }
 }

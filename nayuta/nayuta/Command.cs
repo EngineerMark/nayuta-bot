@@ -17,7 +17,7 @@ namespace nayuta
 
         public CommandManager ParentManager { get; set; }
 
-        public delegate object ReturnFunc(SocketMessage socketMessage, string input);
+        public delegate object ReturnFunc(SocketMessage socketMessage, string input, CommandArguments arguments);
 
         protected ReturnFunc returnFunc;
         
@@ -39,11 +39,11 @@ namespace nayuta
             this.commandDescription = commandDescription;
         }
 
-        public abstract object CommandHandler(SocketMessage socketMessage, string input);
+        public abstract object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments);
 
-        public dynamic Handle(SocketMessage socketMessage)
+        public dynamic Handle(SocketMessage socketMessage, string userInput, CommandArguments arguments)
         {
-            string inputString = socketMessage.Content.ToLower();
+            string inputString = userInput.ToLower();
             string enteredCommand = inputString;
             List<string> splitInputString = enteredCommand.Split(' ').ToList();
             if (enteredCommand.Contains(" "))
@@ -53,8 +53,10 @@ namespace nayuta
 
             string inputStringAdditional = splitInputString.Count>0?splitInputString.Aggregate((i, j) => i + " " + j):"";
 
+            //return "test value: " + arguments.ToString();
+
             if (enteredCommand == CommandManager.Instance.bot.Prefix + commandName)
-                return returnFunc(socketMessage, InputValue?inputStringAdditional:null);
+                return returnFunc(socketMessage, InputValue?inputStringAdditional:null, arguments);
             
             return false;
         }

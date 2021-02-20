@@ -15,9 +15,9 @@ namespace nayuta.Commands
             InputValue = true;
         }
 
-        public override object CommandHandler(SocketMessage socketMessage, string input)
+        public override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments)
         {
-            input = ApplyMode(input);
+            ApplyMode(arguments);
             ApplyPlayer(socketMessage.Author.Id, input);
             
             if (_osuUser == null)
