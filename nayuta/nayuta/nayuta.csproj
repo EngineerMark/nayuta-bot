@@ -189,6 +189,7 @@
     <Compile Include="Commands\CommandOsuProfile.cs" />
     <Compile Include="Commands\CommandOsuRecent.cs" />
     <Compile Include="Commands\CommandOsuRegister.cs" />
+    <Compile Include="Commands\CommandOsuTop.cs" />
     <Compile Include="Commands\CommandPing.cs" />
     <Compile Include="Commands\CommandSystem.cs" />
     <Compile Include="Coroutine\Coroutine.cs" />
