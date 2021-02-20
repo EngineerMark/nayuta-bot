@@ -46,7 +46,7 @@ namespace nayuta.Osu
                 case OsuMode.Mania:
                     return CalculateManiaPP(combo, c50, c100, c300, cMiss, cKatu, cGeki);
                 case OsuMode.Taiko:
-                    //Tbd
+                    return CalculateTaikoPP(combo, c50, c100, c300, cMiss, cKatu, cGeki);
                     return 0f;
                 case OsuMode.Standard:
                     return CalculateStandardPP(combo, c50, c100, c300, cMiss, cKatu, cGeki);
@@ -55,8 +55,74 @@ namespace nayuta.Osu
             return 0f;
         }
 
-        public float CalculateManiaPP(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0,
-            float cGeki = 0)
+        public float CalculateTaikoPP(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0, float cGeki = 0)
+        {
+            if ((Play.Mods & OsuMods.Relax) != 0 || (Play.Mods & OsuMods.Relax2) != 0 ||
+                (Play.Mods & OsuMods.Autoplay) != 0)
+                return 0f;
+            
+            float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
+            
+            float strain = Mathf.Pow(5.0f*Mathf.Max(1.0f, (float)Beatmap.Starrating/0.0075f)-4.0f, 2.0f)/100000.0f;
+
+            float bonusLength = 1 + 0.1f * Mathf.Min(1.0f, Beatmap.ObjectCount / 1500f);
+            strain *= bonusLength;
+
+            strain *= Mathf.Pow(0.985f, cMiss);
+
+            if ((Play.Mods & OsuMods.Hidden) != 0)
+                strain *= 1.025f;
+            
+            if ((Play.Mods & OsuMods.Flashlight) != 0)
+                strain *= 1.05f*bonusLength;
+
+            strain *= real_acc;
+
+            float scaleOD = Beatmap.MapStats.OD;
+            if ((Play.Mods & OsuMods.Easy) != 0)
+                scaleOD *= 0.5f;
+
+            if ((Play.Mods & OsuMods.HardRock) != 0)
+                scaleOD *= 1.4f;
+
+            scaleOD = Mathf.Max(Mathf.Min(scaleOD, 10f), 0f);
+
+            float hwMax = 20;
+            float hwMin = 50;
+            float hwRes = hwMin + (hwMax - hwMin) * scaleOD / 10f;
+            hwRes = Mathf.Floor(hwRes) - 0.5f;
+
+            if ((Play.Mods & OsuMods.HalfTime) != 0)
+                hwRes *= 1.5f;
+
+            if ((Play.Mods & OsuMods.DoubleTime) != 0)
+                hwRes *= 0.75f;
+
+            hwRes = Mathf.Round(hwRes * 100) / 100;
+            float OD300 = hwRes;
+
+            float acc = 0;
+            if (OD300 > 0)
+            {
+                acc = Mathf.Pow(150.0f / OD300, 1.1f) * Mathf.Pow(real_acc, 15f) * 22.0f;
+                acc *= Mathf.Min(1.15f, Mathf.Pow((float)Beatmap.ObjectCount / 1500.0f, 0.3f));
+            }
+
+            float total = 1.1f;
+            
+            if ((Play.Mods & OsuMods.NoFail) != 0)
+                total *= 0.9f;
+            
+            if ((Play.Mods & OsuMods.Hidden) != 0)
+                total *= 1.1f;
+
+            return Mathf.Pow(
+                    Mathf.Pow(strain, 1.1f)+Mathf.Pow(acc, 1.1f),
+                    1.0f/1.1f
+                ) * total;
+        }
+
+        public float CalculateManiaPP(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0, float cGeki = 0)
         {
             if ((Play.Mods & OsuMods.Relax) != 0 || (Play.Mods & OsuMods.Relax2) != 0 ||
                 (Play.Mods & OsuMods.Autoplay) != 0)
