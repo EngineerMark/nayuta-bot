@@ -165,6 +165,6 @@ namespace nayuta.Osu
         }
 
         private static float GetPPBase(float stars) =>
-            (float)Mathf.Pow(5.0f * Mathf.Max(1.0f, stars / 0.0675f) - 4.0f, 3.0f) / 100000.0f;
+            Mathf.Pow(5.0f * Mathf.Max(1.0f, stars / 0.0675f) - 4.0f, 3.0f) / 100000.0f;
     }
 }

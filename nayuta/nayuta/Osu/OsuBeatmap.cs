@@ -15,6 +15,9 @@ namespace nayuta.Osu
         [JsonProperty("beatmap_id")]
         public string BeatmapID { get; set; }
         
+        [JsonProperty("approved")]
+        public BeatmapStatus Status { get; set; }
+        
         [JsonProperty("title")]
         public string Title { get; set; }
         

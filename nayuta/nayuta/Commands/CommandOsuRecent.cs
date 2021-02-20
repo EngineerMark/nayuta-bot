@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Discord;
 using Discord.WebSocket;
+using Humanizer;
 using nayuta.Math;
 using nayuta.Osu;
 
@@ -31,7 +32,8 @@ namespace nayuta.Commands
             EmbedBuilder embed = new EmbedBuilder()
             {
                 Title = "Most recent play by "+_osuUser.Name,
-                Description = "["+recentPlay.Beatmap.Artist+" - "+recentPlay.Beatmap.Title+" \\["+recentPlay.Beatmap.DifficultyName+"\\] **+"+(""+((OsuModsShort) recentPlay.Mods).ModParser()+"").Replace(", ", "")+"**](https://osu.ppy.sh/beatmaps/"+recentPlay.Beatmap.BeatmapID+")",
+                Description = "["+recentPlay.Beatmap.Artist+" - "+recentPlay.Beatmap.Title+" \\["+recentPlay.Beatmap.DifficultyName+"\\]](https://osu.ppy.sh/beatmaps/"+recentPlay.Beatmap.BeatmapID+")\n" +
+                              "Map status: "+ OsuApi.BeatmapStatusEmotes[recentPlay.Beatmap.Status].ToString() + " " + recentPlay.Beatmap.Status.ToString(),
                 ThumbnailUrl = "https://b.ppy.sh/thumb/"+recentPlay.Beatmap.BeatmapSetID+"l.jpg",
                 Fields = new List<EmbedFieldBuilder>()
                 {
@@ -45,9 +47,14 @@ namespace nayuta.Commands
                     new EmbedFieldBuilder()
                     {
                         Name = "Play Information",
-                        Value = OsuRanks.GetEmojiFromRank(recentPlay.Rank).ToString()+" "+Mathf.Round(recentPlay.Accuracy, 2)+"% • "+Mathf.Round(recentPlay.Performance.CurrentValue, 2)+"pp "+recentPlay.MaxCombo + "/" + recentPlay.Beatmap.MaxCombo+" "+((recentPlay.IsFullcombo=="1"?"":"(For FC: "+Mathf.Round(recentPlay.Performance.CurrentValueIfFC, 2)+"pp)")),
+                        Value = OsuRanks.GetEmojiFromRank(recentPlay.Rank).ToString()+" "+Mathf.Round(recentPlay.Accuracy, 2)+"% **+"+(""+((OsuModsShort) recentPlay.Mods).ModParser()+"").Replace(", ", "")+"** • **"+Mathf.Round(recentPlay.Performance.CurrentValue, 2)+"pp** "+recentPlay.MaxCombo + "x/" + recentPlay.Beatmap.MaxCombo+"x "+((recentPlay.IsFullcombo=="1"?"":"(For FC: **"+Mathf.Round(recentPlay.Performance.CurrentValueIfFC, 2)+"pp**)"))+"\n" +
+                                "["+recentPlay.C300+"/"+recentPlay.C100+"/"+recentPlay.C50+"/"+recentPlay.CMiss+"] • "+recentPlay.Score.FormatNumber(),
                         IsInline = false
                     }
+                },
+                Footer = new EmbedFooterBuilder()
+                {
+                    Text = "Played "+DateTime.Parse(recentPlay.DateAchieved).Humanize(),
                 }
             };
             return embed;

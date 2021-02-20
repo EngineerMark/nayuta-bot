@@ -200,6 +200,7 @@
     <Compile Include="Internal\InternalUserManager.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Math\Mathf.cs" />
+    <Compile Include="Osu\BeatmapStatus.cs" />
     <Compile Include="Osu\HitObject.cs" />
     <Compile Include="Osu\MapStats.cs" />
     <Compile Include="Osu\OsuApi.cs" />

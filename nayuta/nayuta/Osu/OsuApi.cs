@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Discord;
 using nayuta.Math;
 
 namespace nayuta.Osu
@@ -8,6 +9,16 @@ namespace nayuta.Osu
     {
         private static string apiKey = "c8186625bb3684645cd6e46325fe17c59537e54c";
         private static string apiUrl = "https://osu.ppy.sh/api/";
+
+        public static Dictionary<BeatmapStatus, Emoji> BeatmapStatusEmotes = new Dictionary<BeatmapStatus, Emoji>()
+        {
+            {BeatmapStatus.Graveyarded, new Emoji("\u26B0")},
+            {BeatmapStatus.Unranked, new Emoji("\uD83D\uDEA7")},
+            {BeatmapStatus.Pending, new Emoji("\u231B")},
+            {BeatmapStatus.Qualified, new Emoji("\u2705")},
+            {BeatmapStatus.Ranked, new Emoji("\u2705")},
+            {BeatmapStatus.Loved, new Emoji("\u2764\uFE0F")}
+        };
 
         public static OsuUser GetUser(string username, OsuMode mode = OsuMode.Standard)
         {
