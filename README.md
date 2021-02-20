@@ -41,3 +41,6 @@ When stuff is missing, just open an issue and I will deal with it within reasona
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Links
+[Trello Board](https://trello.com/b/Sgk7Slsh/nayuta)
