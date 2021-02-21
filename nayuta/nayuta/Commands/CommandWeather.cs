@@ -30,25 +30,48 @@ namespace nayuta.Commands
                 Color = ParentManager.bot.BotColor,
                 Title = "Current weather for "+ (new CultureInfo("en-US", false).TextInfo.ToTitleCase(data.Location))+" :flag_" + data.LocationInfo.Country.ToLower()+":",
                 ThumbnailUrl = string.Format("http://openweathermap.org/img/wn/{0}@2x.png", data.Info[0].Icon),
-                Description = data.Info[0].Main,
+                Description = "Condition: "+data.Info[0].Main,
                 Fields = new List<EmbedFieldBuilder>()
                 {
                     new EmbedFieldBuilder()
                     {
                         Name = "Temperature",
-                        Value = ""+Mathf.Round(data.Air.TemperatureCelcius, 1)+"°C",
+                        Value = ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F" +
+                                "\nFeels like "+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.FeelTemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.FeelTemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F",
                         IsInline = true
                     },
                     new EmbedFieldBuilder()
                     {
-                        Name = "Maximum Temperature",
-                        Value = ""+Mathf.Round(data.Air.TemperatureHighCelcius, 1)+"°C",
+                        Name = "High",
+                        Value = ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureHighKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureHighKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F",
                         IsInline = true
                     },
                     new EmbedFieldBuilder()
                     {
-                        Name = "Minimum Temperature",
-                        Value = ""+Mathf.Round(data.Air.TemperatureLowCelcius, 1)+"°C",
+                        Name = "Low",
+                        Value = ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureLowKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureLowKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F",
+                        IsInline = true
+                    },
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Air Pressure",
+                        Value = ""+data.Air.AirPressure+"hPa",
+                        IsInline = true
+                    },
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Humidity",
+                        Value = ""+Mathf.Round(data.Air.AirHumidity, 1)+"%",
+                        IsInline = true
+                    },
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Visibility",
+                        Value = (data.ViewDistance>=1000?Mathf.Round(data.ViewDistance/1000f, 0)+"km":data.ViewDistance+"m"),
                         IsInline = true
                     }
                 }

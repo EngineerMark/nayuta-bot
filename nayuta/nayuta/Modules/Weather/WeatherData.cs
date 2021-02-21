@@ -117,17 +117,5 @@ namespace nayuta.Modules.Weather
         
         [JsonProperty("humidity")]
         public float AirHumidity { get; set; }
-
-        [JsonIgnore] 
-        public float TemperatureCelcius => TemperatureKelvin - 273.15f;
-        
-        [JsonIgnore]
-        public float FeelTemperatureCelcius => FeelTemperatureKelvin - 273.15f;
-        
-        [JsonIgnore]
-        public float TemperatureLowCelcius => TemperatureLowKelvin - 273.15f;
-        
-        [JsonIgnore]
-        public float TemperatureHighCelcius => TemperatureHighKelvin - 273.15f;
     }
 }
