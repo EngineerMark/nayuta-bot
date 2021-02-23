@@ -1,26 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
 using nayuta.Math;
 
 namespace nayuta.Modules.Osu
 {
     public class MapStats
     {
-        private const float OD0Ms = 79.5f;
-        private const float OD10Ms = 19.5f;
-        private const float AR0Ms = 1800.0f;
-        private const float AR5Ms = 1200.0f;
-        private const float AR10Ms = 450.0f;
+        private const float OD_0_MS = 79.5f;
+        private const float OD_10_MS = 19.5f;
+        private const float AR_0_MS = 1800f;
+        private const float AR_5_MS = 1200f;
+        private const float AR_10_MS = 450f;
+        private const float OD_MS_STEP = 6f;
+        private const float AR_MS_STEP1 = 120f;
+        private const float AR_MS_STEP2 = 150f;
 
-        private const float ODMsStep = (OD0Ms - OD10Ms) / 10.0f;
-        private const float ARMsStep1 = (AR0Ms - AR5Ms) / 5.0f;
-        private const float ARMsStep2 = (AR5Ms - AR10Ms) / 5.0f;
-        
+
+
         public float AR, OD, CS, HP;
         public float Speed;
 
         public OsuBeatmap Beatmap;
         public OsuMods Mods;
-
+        
         public MapStats(OsuBeatmap beatmap, OsuMods mods)
         {
             Beatmap = beatmap;
@@ -31,52 +33,47 @@ namespace nayuta.Modules.Osu
 
         public void Calculate()
         {
-            Speed = 1.0f;
-            float odArLimit = 10;
+            AR = Beatmap.ApproachRate??0;
+            OD = Beatmap.OverallDifficulty??0;
+            CS = Beatmap.CircleSize??0;
+            HP = Beatmap.Drain??0;
 
-            if ((Mods & (OsuMods.DoubleTime | OsuMods.Nightcore)) != 0 && (Mods&OsuMods.HardRock)!=0)
-                odArLimit = 11;
+            // HR / EZ multiplier
+            if ((Mods & OsuMods.HardRock) != 0)
+            {
+                CS *= 1.3f;
+                AR *= 1.4f;
+                OD *= 1.4f;
+                HP *= 1.4f;
+            }else if ((Mods & OsuMods.Easy) != 0)
+            {
+                CS *= 0.5f;
+                AR *= 0.5f;
+                OD *= 0.5f;
+                HP *= 0.5f;
+            }
 
-            if ((Mods & (OsuMods.DoubleTime | OsuMods.Nightcore)) != 0)
+            float ODMS = OD_0_MS - Mathf.Ceil(OD_MS_STEP * OD);
+            float ARMS = AR < 5 ? (AR_0_MS - AR_MS_STEP1 * AR) : (AR_5_MS - AR_MS_STEP2 * (AR - 5f));
+
+            ODMS = Mathf.Min(OD_0_MS, Mathf.Max(OD_10_MS, ODMS));
+            ARMS = Mathf.Min(AR_0_MS, Mathf.Max(AR_10_MS, ARMS));
+
+            Speed = 1f;
+            if ((Mods & OsuMods.DoubleTime) != 0)
                 Speed *= 1.5f;
-
-            if ((Mods&(OsuMods.HalfTime))!=0)
+            else if ((Mods & OsuMods.HalfTime) != 0)
                 Speed *= 0.75f;
 
-            float odArHpMultiplier = 1.0f;
+            float invSpeed = 1 / Speed;
 
-            if ((Mods & OsuMods.HardRock) != 0)
-                odArHpMultiplier *= 1.4f;
-            
-            if ((Mods & OsuMods.Easy) != 0)
-                odArHpMultiplier *= 0.5f;
+            ODMS *= invSpeed;
+            ARMS *= invSpeed;
 
-            AR = Beatmap.ApproachRate??0;
-            AR *= odArHpMultiplier;
+            OD = (OD_0_MS - ODMS) / OD_MS_STEP;
+            AR = ARMS>AR_5_MS ? ((AR_0_MS - ARMS) / AR_MS_STEP1) : (5.0f + (AR_5_MS - ARMS) / AR_MS_STEP2);
 
-            float arms = AR < 5f ? AR0Ms - ARMsStep1 * AR : AR5Ms - ARMsStep2 * (AR - 5f);
-            AR = (arms > AR5Ms) ? (AR0Ms - arms) / ARMsStep1 : 5.0f + (AR5Ms - arms) / ARMsStep2;
-
-            OD = Beatmap.OverallDifficulty??0;
-            OD *= odArHpMultiplier;
-            float odms = OD0Ms - (float) Mathf.Ceil(ODMsStep * OD);
-            odms = (float) Mathf.Min(OD0Ms, Mathf.Max(OD10Ms, odms));
-            odms /= Speed;
-            OD = (float) ((OD0Ms - odms) / ODMsStep);
-
-            CS = Beatmap.CircleSize??0;
-
-            if ((Mods & OsuMods.HardRock) != 0)
-                CS *= 1.3f;
-
-            if ((Mods & OsuMods.Easy) != 0)
-                CS *= 0.5f;
-
-            CS = Mathf.Min(10.0f, CS);
-            HP = Mathf.Min(10f, Beatmap.Drain??0 * odArHpMultiplier);
-
-            AR = Mathf.Min(odArLimit, AR);
-            OD = Mathf.Min(odArLimit, OD);
+            CS = Mathf.Max(0.0f, Mathf.Min(10.0f, CS));
         }
     }
 }
