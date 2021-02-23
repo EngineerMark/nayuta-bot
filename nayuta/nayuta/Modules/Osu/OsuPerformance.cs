@@ -28,10 +28,10 @@ namespace nayuta.Modules.Osu
 
         public void CalculateCurrentPerformance()
         {
-            if (Play.PP == -1)
+            //if (Play.PP == -1)
                 CurrentValue = CalculatePerformance(Play.MaxCombo, Play.C50, Play.C100, Play.C300, Play.CMiss, Play.CKatu, Play.CGeki);
-            else
-                CurrentValue = Play.PP;
+            //else
+            //    CurrentValue = Play.PP;
 
             CurrentValueIfFC =
                 CalculatePerformance(Beatmap.MaxCombo??0, Play.C50, Play.C100, Play.C300 + Play.CMiss, 0, Play.CKatu, Play.CGeki);
@@ -246,115 +246,109 @@ namespace nayuta.Modules.Osu
             if ((Play.Mods & OsuMods.Relax) != 0 || (Play.Mods & OsuMods.Relax2) != 0 ||
                 (Play.Mods & OsuMods.Autoplay) != 0)
                 return 0f;
+
+            float Accuracy = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
             
-            float _objectsOver2K = Beatmap.ObjectCount / 2000f;
-            float bonusLength = 0.95f + 0.4f * Mathf.Min(1.0f, _objectsOver2K);
-
-            if (_objectsOver2K > 2000)
-                bonusLength += Mathf.Log10(_objectsOver2K) * 0.5f;
-
-            float _comboBreak = Mathf.Pow(combo, 0.8f) / Mathf.Pow((float)Beatmap.MaxCombo, 0.8f);
+#region Standard MUL
+            float cTotalHits = c50 + c100 + c300 + cMiss;
             
-            float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
-
-            float doubletapPenalty = Mathf.Pow(0.98f,
-                c50 < Beatmap.ObjectCount ? 0 : c50 - Beatmap.ObjectCount / 500f);
-
-            // AR bonus
-            float bonusAR = 0.0f;
+            float BonusLength = 0.95f + 0.4f * Mathf.Min(1.0f, cTotalHits/2000.0f)+
+                                (cTotalHits>2000?Mathf.Log10(cTotalHits/2000.0f)*0.5f:0.0f);
             
-            // Prehotfix bonus AR (<Jan 16 2021)
-            // if (Beatmap.MapStats.AR > 10.33f)
-            //     bonusAR += 0.4f * (Beatmap.MapStats.AR - 10.33f);
-            // else if (Beatmap.MapStats.AR < 8.0f)
-            //     bonusAR += 0.1f * (8.0f - Beatmap.MapStats.AR);
+            float BonusMiss = (cMiss>0?0.97f*Mathf.Pow(1.0f-Mathf.Pow(cMiss/cTotalHits, 0.775f), cMiss):1.0f);
             
-            // New AR bonus
-            if(Beatmap.MapStats.AR>10.33f)
-                bonusAR+=0.2666f*Mathf.Min(1.0f, 1f/1000f*Beatmap.ObjectCount);
-            else if (Beatmap.MapStats.AR < 8.0f)
-                bonusAR += 0.1f * (8.0f - Beatmap.MapStats.AR);
+            float BonusCombo = (Beatmap.MaxCombo > 0
+                ? Mathf.Min((Mathf.Pow(combo, 0.8f) / Mathf.Pow((float) Beatmap.MaxCombo, 0.8f)), 1.0f)
+                : 1.0f);
 
-            bonusAR = 1.0f + Mathf.Min(bonusAR, bonusAR * (Beatmap.ObjectCount / 1000f));
-
-            float aim = GetPPBase((float)Beatmap.StarratingAim);
-            aim *= bonusLength;
-
-            //Miss penalty
-            if (cMiss > 0)
-                aim *= 0.97f * Mathf.Pow(1 - Mathf.Pow(cMiss / Beatmap.ObjectCount, 0.775f), cMiss);
-
-            aim *= _comboBreak;
-            aim *= bonusAR;
-            
-            // HD bonus
-            float bonusHD = 1.0f;
-            if ((Play.Mods & OsuMods.Hidden) != 0)
-                bonusHD *= 1.0f + 0.04f * (12.0f - Beatmap.MapStats.AR);
-
-            aim *= bonusHD;
-            
-            // FL bonus
-            if ((Play.Mods & OsuMods.Flashlight) != 0)
-            {
-                float bonusFL = 1.0f + 0.35f * Mathf.Min(1.0f, Beatmap.ObjectCount / 200f);
-                if (Beatmap.ObjectCount > 200f)
-                    bonusFL += 0.3f * Mathf.Min(1.0f, (Beatmap.ObjectCount - 200f) / 300f);
-
-                if (Beatmap.ObjectCount > 500f)
-                    bonusFL += (Beatmap.ObjectCount - 500f) / 1200f;
-
-                aim *= bonusFL;
-            }
-
-            float bonusAcc = 0.5f + real_acc / 2.0f;
-
-            aim *= bonusAcc;
-
-            AimPP = aim;
-
-            float speed = GetPPBase((float)Beatmap.StarratingSpeed);
-            speed *= bonusLength;
-
-            if (cMiss > 0)
-                speed *= 0.97f * Mathf.Pow(1f - Mathf.Pow(cMiss / Beatmap.ObjectCount, 0.775f),
-                    Mathf.Pow(cMiss, 0.875f));
-            speed *= doubletapPenalty;
-            speed *= _comboBreak;
+            float BonusApproachRateFactor = 0.0f;
             if (Beatmap.MapStats.AR > 10.33f)
-                speed *= bonusAR;
-            speed *= bonusHD;
-            float squaredOD = Mathf.Pow(Beatmap.MapStats.OD, 2f);
-            float bonusOD = (0.95f + squaredOD / 750f) *
-                            Mathf.Pow(real_acc, (14.5f - Mathf.Max(Beatmap.MapStats.OD, 8f)) / 2f);
-
-            speed *= bonusOD;
+                BonusApproachRateFactor += 0.4f * (Beatmap.MapStats.AR - 10.33f);
+            else if (Beatmap.MapStats.AR < 8.0f)
+                BonusApproachRateFactor += 0.01f * (8.0f - Beatmap.MapStats.AR);
+            float BonusApproachRate =
+                1.0f + Mathf.Min(BonusApproachRateFactor, BonusApproachRateFactor * (cTotalHits / 1000.0f));
             
-            SpeedPP = speed;
+            float BonusHidden = ((Play.Mods&OsuMods.Hidden)!=0)?1.0f+0.04f*(12.0f-Beatmap.MapStats.AR):1.0f;
             
-            float acc = (Mathf.Pow(1.52163f, Beatmap.MapStats.OD)*Mathf.Pow(real_acc, 24.0f)*2.83f);
+            float BonusFlashlight = ((Play.Mods&OsuMods.Flashlight)!=0)
+                    ?1.0f+0.35f*Mathf.Min(1.0f, cTotalHits/200.0f)+(cTotalHits>200?0.3f*Mathf.Min(1.0f,(cTotalHits-200f)/300f)+(cTotalHits>500? (
+                        cTotalHits - 500)/1200.0f:0.0f):0.0f):1.0f;
 
-            acc *= Mathf.Min(1.15f, Mathf.Pow((float)Beatmap.CircleCount / 1000f, 0.3f));
+#endregion
+            
+#region Standard AIM
+            float AimValue = GetPPBase((float)Beatmap.StarratingAim);
+
+            AimValue *= BonusLength;
+            AimValue *= BonusMiss;
+            AimValue *= BonusCombo;
+            AimValue *= BonusApproachRate;
+            AimValue *= BonusHidden;
+            AimValue *= BonusFlashlight;
+
+            AimValue *= (0.5f + Accuracy / 2.0f);
+
+            AimValue *= (0.98f + (Mathf.Pow(Beatmap.MapStats.OD, 2f) / 2500f));
+#endregion
+
+#region Standard SPEED
+            float SpeedValue = GetPPBase((float)Beatmap.StarratingSpeed);
+
+            SpeedValue *= BonusLength;
+            SpeedValue *= BonusMiss;
+            SpeedValue *= BonusCombo;
+            //SpeedValue *= BonusApproachRate;
+            float BonusSpeedApproachRateFactor = 0;
+            if (Beatmap.MapStats.AR > 10.33f)
+                BonusSpeedApproachRateFactor += 0.4f * (Beatmap.MapStats.AR - 10.33f);
+            SpeedValue *= 1.0f + Mathf.Min(BonusSpeedApproachRateFactor,
+                BonusSpeedApproachRateFactor * (cTotalHits / 1000f));
+            
+            SpeedValue *= BonusHidden;
+
+            SpeedValue *= (0.95f + Mathf.Pow(Beatmap.MapStats.OD, 2f) / 750f) *
+                          Mathf.Pow(Accuracy, (14.5f - Mathf.Max(Beatmap.MapStats.OD, 8.0f)) / 2f);
+            SpeedValue *= Mathf.Pow(0.98f, (c50 < cTotalHits / 500f) ? (0.0f) : (c50 - cTotalHits / 500f));
+#endregion
+
+#region Standard ACC
+
+            float BetterAccuracyPercentage = 0;
+            float cHitObjectsWithAccuracy = (float)Beatmap.CircleCount;
+            if (cHitObjectsWithAccuracy > 0)
+                BetterAccuracyPercentage = ((c300 - (cTotalHits - cHitObjectsWithAccuracy)) * 6 + c100 * 2 + c50)/(cHitObjectsWithAccuracy*6);
+
+            if (BetterAccuracyPercentage < 0)
+                BetterAccuracyPercentage = 0;
+
+            float AccValue = Mathf.Pow(1.52163f, Beatmap.MapStats.OD)*Mathf.Pow(BetterAccuracyPercentage, 24)*2.83f;
+
+            AccValue *= Mathf.Min(1.15f, Mathf.Pow(cHitObjectsWithAccuracy / 1000f, 0.3f));
+
             if ((Play.Mods & OsuMods.Hidden) != 0)
-                acc *= 1.08f;
-            if ((Play.Mods & OsuMods.Flashlight) != 0)
-                acc *= 1.02f;
-            AccPP = acc;
-
-            float final_multiplier = 1.12f;
-             if ((Play.Mods & OsuMods.NoFail) != 0)
-                 final_multiplier *= Mathf.Max(0.9f, 1.0f - 0.02f * cMiss);
-            if ((Play.Mods & OsuMods.SpunOut) != 0)
-                final_multiplier *= 1.0f - Mathf.Pow((float)Beatmap.SpinnerCount / (float)Beatmap.ObjectCount, 0.85f);
-
-            float total = Mathf.Pow(
-                Mathf.Pow(AimPP, 1.1f)+
-                Mathf.Pow(SpeedPP, 1.1f)+
-                Mathf.Pow(AccPP, 1.1f),
-                1.0f/1.1f
-            )*final_multiplier;
+                AccValue *= 1.08f;
             
-            return total;
+            if ((Play.Mods & OsuMods.Flashlight) != 0)
+                AccValue *= 1.02f;
+#endregion
+
+            float TotalMultiplier = 1.12f;
+
+            if ((Play.Mods & OsuMods.NoFail) != 0)
+                TotalMultiplier *= Mathf.Max(0.9f, 1.0f - 0.02f * cMiss);
+
+            if ((Play.Mods & OsuMods.SpunOut) != 0)
+                TotalMultiplier *= 1.0f - Mathf.Pow((float)Beatmap.SpinnerCount / cTotalHits, 0.85f);
+
+            float TotalValue = Mathf.Pow(
+                Mathf.Pow(AimValue, 1.1f) +
+                Mathf.Pow(SpeedValue, 1.1f) +
+                Mathf.Pow(AccValue, 1.1f),
+                1.0f / 1.1f
+            ) * TotalMultiplier;
+            
+            return TotalValue;
         }
 
         private static float GetPPBase(float stars) =>
