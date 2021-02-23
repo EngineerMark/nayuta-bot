@@ -38,7 +38,7 @@ namespace nayuta.Commands
             if (limit > 5)
                 limit = 5;
 
-            List<OsuPlay> topPlays = OsuApi.GetUserBest(_osuUser, _osuMode, 100, true);
+            List<OsuPlay> topPlays = OsuApi.GetUserBest(_osuUser, _osuMode, 100, false);
 
             if (topPlays.Count == 0)
                 return "This player has no top plays in osu!" + _osuMode;
@@ -74,6 +74,8 @@ namespace nayuta.Commands
             {
                 int playIndex = playPair.Key;
                 OsuPlay play = playPair.Value;
+                
+                play.Beatmap = OsuApi.GetBeatmap(play.MapID, play.Mods, play.Mode);
                 
                 EmbedFieldBuilder field = new EmbedFieldBuilder()
                 {

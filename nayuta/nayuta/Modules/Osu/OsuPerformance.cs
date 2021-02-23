@@ -130,11 +130,13 @@ namespace nayuta.Modules.Osu
             if ((Play.Mods & OsuMods.Relax) != 0 || (Play.Mods & OsuMods.Relax2) != 0 ||
                 (Play.Mods & OsuMods.Autoplay) != 0)
                 return 0f;
+            
+            float cTotalHits = c50 + c100 + c300 + cMiss + cGeki + cKatu;
 
             float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki);
 
             float strainbase = Mathf.Pow(5.0f * Mathf.Max(1f, (float) Beatmap.Starrating / 0.2f) - 4f, 2.2f) / 135.0f;
-            strainbase *= 1f + 0.1f * Mathf.Min(1f, (float) Beatmap.ObjectCount / 1500f);
+            strainbase *= 1f + 0.1f * Mathf.Min(1f, cTotalHits / 1500f);
 
             float strain = strainbase;
             float scoreMultiplier = 0;
@@ -171,7 +173,7 @@ namespace nayuta.Modules.Osu
             else
                 acc = 0;
 
-            float total = 0.73f;
+            float total = 0.8f;
 
             if ((Play.Mods & OsuMods.NoFail) != 0)
                 total *= 0.9f;
@@ -186,7 +188,7 @@ namespace nayuta.Modules.Osu
                 Mathf.Pow(strain*scoreMultiplier, 1.1f)+
                 Mathf.Pow(acc, 1.1f),
                 1.0f/1.1f
-                )*1.1f;
+                );
         }
 
         public float CalculateCatchPP(float combo, float c50, float c100, float c300, float cMiss, float cKatu = 0, float cGeki = 0)
