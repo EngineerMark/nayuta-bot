@@ -181,11 +181,13 @@ namespace nayuta.Modules.Osu
                 (Play.Mods & OsuMods.Autoplay) != 0)
                 return 0f;
 
-            float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
-
+            //float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
+            float cTotalHits = cMiss + c100 + c300;
+            float real_acc = Mathf.Min(1f, Mathf.Max((c50 + c100 + c300) / (cTotalHits+c50+cKatu), 0f));
+            
             float value = Mathf.Pow(5.0f*Mathf.Max(1.0f, (float)Beatmap.Starrating/0.0049f)-4.0f, 2.0f)/100000.0f;
-            float bonusLength = 0.95f+0.3f*Mathf.Min(1.0f, Beatmap.ObjectCount/2500f)+
-                                (Beatmap.ObjectCount>2500?Mathf.Log10(Beatmap.ObjectCount/2500f)*0.475f:0.0f);
+            float bonusLength = 0.95f+0.3f*Mathf.Min(1.0f, cTotalHits/2500f)+
+                                (cTotalHits>2500?Mathf.Log10(cTotalHits/2500f)*0.475f:0.0f);
             value *= bonusLength;
 
             //Miss penalty
