@@ -64,11 +64,13 @@ namespace nayuta.Modules.Osu
                 (Play.Mods & OsuMods.Autoplay) != 0)
                 return 0f;
             
+            float cTotalHits = c50 + c100 + c300 + cMiss;
+            
             float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
             
             float strain = Mathf.Pow(5.0f*Mathf.Max(1.0f, (float)Beatmap.Starrating/0.0075f)-4.0f, 2.0f)/100000.0f;
 
-            float bonusLength = 1 + 0.1f * Mathf.Min(1.0f, Beatmap.ObjectCount / 1500f);
+            float bonusLength = 1f + 0.1f * Mathf.Min(1.0f, cTotalHits / 1500f);
             strain *= bonusLength;
 
             strain *= Mathf.Pow(0.985f, cMiss);
@@ -81,34 +83,16 @@ namespace nayuta.Modules.Osu
 
             strain *= real_acc;
 
-            float scaleOD = Beatmap.MapStats.OD;
-            if ((Play.Mods & OsuMods.Easy) != 0)
-                scaleOD *= 0.5f;
+            float OD300 = 49f - (Beatmap.MapStats.OD * 3) + 0.5f;
 
-            if ((Play.Mods & OsuMods.HardRock) != 0)
-                scaleOD *= 1.4f;
-
-            scaleOD = Mathf.Max(Mathf.Min(scaleOD, 10f), 0f);
-
-            float hwMax = 20;
-            float hwMin = 50;
-            float hwRes = hwMin + (hwMax - hwMin) * scaleOD / 10f;
-            hwRes = Mathf.Floor(hwRes) - 0.5f;
-
-            if ((Play.Mods & OsuMods.HalfTime) != 0)
-                hwRes *= 1.5f;
-
-            if ((Play.Mods & OsuMods.DoubleTime) != 0)
-                hwRes *= 0.75f;
-
-            hwRes = Mathf.Round(hwRes * 100) / 100;
-            float OD300 = hwRes;
+            if ((Play.Mods & OsuMods.HalfTime) != 0) OD300 *= (4f/3f)+0.66f;
+            if ((Play.Mods & OsuMods.DoubleTime) != 0) OD300 *= (2f/3f)+0.33f;
 
             float acc = 0;
             if (OD300 > 0)
             {
                 acc = Mathf.Pow(150.0f / OD300, 1.1f) * Mathf.Pow(real_acc, 15f) * 22.0f;
-                acc *= Mathf.Min(1.15f, Mathf.Pow((float)Beatmap.ObjectCount / 1500.0f, 0.3f));
+                acc *= Mathf.Min(1.15f, Mathf.Pow(cTotalHits / 1500.0f, 0.3f));
             }
 
             float total = 1.1f;
