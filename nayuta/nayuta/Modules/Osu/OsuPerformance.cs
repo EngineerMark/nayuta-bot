@@ -28,10 +28,10 @@ namespace nayuta.Modules.Osu
 
         public void CalculateCurrentPerformance()
         {
-            //if (Play.PP == -1)
+            if (Play.PP == -1)
                 CurrentValue = CalculatePerformance(Play.MaxCombo, Play.C50, Play.C100, Play.C300, Play.CMiss, Play.CKatu, Play.CGeki);
-            //else
-            //    CurrentValue = Play.PP;
+            else
+                CurrentValue = Play.PP;
 
             CurrentValueIfFC =
                 CalculatePerformance(Beatmap.MaxCombo??0, Play.C50, Play.C100, Play.C300 + Play.CMiss, 0, Play.CKatu, Play.CGeki);
