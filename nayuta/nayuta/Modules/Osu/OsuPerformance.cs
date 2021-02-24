@@ -64,9 +64,10 @@ namespace nayuta.Modules.Osu
                 (Play.Mods & OsuMods.Autoplay) != 0)
                 return 0f;
             
-            float cTotalHits = c50 + c100 + c300 + cMiss;
+            float cTotalHits = combo;
             
             float real_acc = OsuApi.CalculateAccuracy(Play.Mode, cMiss, c50, c100, c300, cKatu, cGeki) * 0.01f;
+            //float real_acc = Mathf.Min(1.0f, Mathf.Max(0.0f, (c100 * 150 + c300 * 300)/(cTotalHits*300)));
             
             float strain = Mathf.Pow(5.0f*Mathf.Max(1.0f, (float)Beatmap.Starrating/0.0075f)-4.0f, 2.0f)/100000.0f;
 
@@ -74,6 +75,8 @@ namespace nayuta.Modules.Osu
             strain *= bonusLength;
 
             strain *= Mathf.Pow(0.985f, cMiss);
+
+            strain *= Mathf.Min(Mathf.Pow(Play.MaxCombo, 0.5f) / Mathf.Pow(cTotalHits, 0.5f), 1);
 
             if ((Play.Mods & OsuMods.Hidden) != 0)
                 strain *= 1.025f;
@@ -83,10 +86,18 @@ namespace nayuta.Modules.Osu
 
             strain *= real_acc;
 
-            float OD300 = 49f - (Beatmap.MapStats.OD * 3) + 0.5f;
+            float OD300 = 0;
 
-            if ((Play.Mods & OsuMods.HalfTime) != 0) OD300 *= (4f/3f)+0.66f;
-            if ((Play.Mods & OsuMods.DoubleTime) != 0) OD300 *= (2f/3f)+0.33f;
+            float hwMax = 20f;
+            float hwMin = 50f;
+
+            float hwResult = hwMin + (hwMax - hwMin) * Beatmap.MapStats.OD / 10f;
+            hwResult = Mathf.Floor(hwResult) - 0.5f;
+            
+            if ((Play.Mods & OsuMods.HalfTime) != 0) hwResult *= 1.5f;
+            if ((Play.Mods & OsuMods.DoubleTime) != 0) hwResult *= 0.75f;
+
+            OD300 = Mathf.Round(hwResult * 100f) / 100f;
 
             float acc = 0;
             if (OD300 > 0)
