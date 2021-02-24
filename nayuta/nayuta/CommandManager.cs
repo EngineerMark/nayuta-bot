@@ -34,11 +34,12 @@ namespace nayuta
             command.ParentManager = this;
         }
 
-        public IEnumerator ProcessCommands(Bot bot, SocketMessage socketMessage)
+        public void ProcessCommands(Bot bot, SocketMessage socketMessage)
         {
             string parsedMessage = socketMessage.Content.ToLower();
             if (socketMessage.Author.IsBot)
-                yield break;
+                return;
+                //yield break;
 
             InternalUser user = DatabaseManager.Instance.GetUser(socketMessage.Author.Id);
             if (user == null)
@@ -69,7 +70,7 @@ namespace nayuta
                 }
             }
             
-            yield return null;
+            // yield return null;
         }
     }
 }

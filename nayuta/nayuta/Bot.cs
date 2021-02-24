@@ -15,6 +15,7 @@ namespace nayuta
     public class Bot
     {
         private CommandManager _commandManager;
+        private GuildThreadManager _guildThreadManager;
         private DatabaseManager _databaseManager;
         private InternalUserManager _internalUserManager;
         
@@ -52,6 +53,7 @@ namespace nayuta
 
             _databaseManager = new DatabaseManager();
             _internalUserManager = new InternalUserManager();
+            _guildThreadManager = new GuildThreadManager();
             
             MainAsync().GetAwaiter().GetResult();
         }
@@ -70,7 +72,8 @@ namespace nayuta
 
         private async Task MessageReceived(SocketMessage socketMessage)
         {
-            Yielder.Instance.StartCoroutine(_commandManager.ProcessCommands(this, socketMessage));
+            //Yielder.Instance.StartCoroutine(_commandManager.ProcessCommands(this, socketMessage));
+            _guildThreadManager.EnqueueCommand(this, socketMessage);
         }
 
         public IEnumerator SendStringMessage(SocketMessage sourceMessage, string message)
