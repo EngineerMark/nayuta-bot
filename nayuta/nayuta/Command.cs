@@ -12,8 +12,7 @@ namespace nayuta
         public bool InputValue { get; set; }
         private string commandName;
         private string commandDescription;
-
-        
+        private bool displayInHelp;
 
         public CommandManager ParentManager { get; set; }
 
@@ -32,11 +31,18 @@ namespace nayuta
             private set => commandDescription = value;
         }
         
-        public Command(string commandName, string commandDescription = null)
+        public bool DisplayInHelp
+        {
+            get => displayInHelp;
+            private set => displayInHelp = value;
+        }
+        
+        public Command(string commandName, string commandDescription = null, bool displayInHelp = true)
         {
             this.commandName = commandName;
             this.returnFunc = CommandHandler;
             this.commandDescription = commandDescription;
+            this.displayInHelp = displayInHelp;
         }
 
         public abstract object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments);

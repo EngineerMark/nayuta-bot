@@ -12,11 +12,11 @@ namespace nayuta.Commands
         protected OsuUser _osuUser;
         protected OsuMode _osuMode;
         
-        public CommandOsu(string command, string description = null) : base("osu"+command, description)
+        public CommandOsu(string commandName, string commandDescription = null) : base("osu"+commandName, commandDescription)
         {
         }
 
-        public override abstract object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments);
+        public abstract override object CommandHandler(SocketMessage socketMessage, string input, CommandArguments arguments);
 
         protected void ApplyMode(CommandArguments args)
         {

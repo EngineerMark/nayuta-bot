@@ -192,6 +192,8 @@
     <Compile Include="Commands\CommandOsuTop.cs" />
     <Compile Include="Commands\CommandPing.cs" />
     <Compile Include="Commands\CommandSystem.cs" />
+    <Compile Include="Commands\CommandWaifu.cs" />
+    <Compile Include="Commands\CommandWaifuSearch.cs" />
     <Compile Include="Commands\CommandWeather.cs" />
     <Compile Include="Coroutine\Coroutine.cs" />
     <Compile Include="Coroutine\IWait.cs" />
@@ -216,6 +218,10 @@
     <Compile Include="Modules\Osu\OsuPlay.cs" />
     <Compile Include="Modules\Osu\OsuRanks.cs" />
     <Compile Include="Modules\Osu\OsuUser.cs" />
+    <Compile Include="Modules\Waifu\Waifu.cs" />
+    <Compile Include="Modules\Waifu\WaifuApi.cs" />
+    <Compile Include="Modules\Waifu\WaifuMeasurements.cs" />
+    <Compile Include="Modules\Waifu\WaifuResult.cs" />
     <Compile Include="Modules\Weather\WeatherApi.cs" />
     <Compile Include="Modules\Weather\WeatherData.cs" />
     <Compile Include="Program.cs" />

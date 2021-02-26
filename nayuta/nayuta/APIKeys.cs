@@ -2,6 +2,7 @@
 {
     public static partial class APIKeys
     {
+        public static readonly string WaifuAPIKey = "";
         public static readonly string WeatherAPIKey = "";
         public static readonly string OsuAPIKey = "";
         public static readonly string DiscordToken = "";

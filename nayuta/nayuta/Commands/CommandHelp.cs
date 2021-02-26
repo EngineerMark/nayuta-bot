@@ -18,7 +18,8 @@ namespace nayuta.Commands
             string commandListValue = "";
             foreach (Command command in ParentManager.Commands)
             {
-                commandListValue += ParentManager.bot.Prefix + command.CommandName + " - "+(string.IsNullOrEmpty(command.CommandDescription)?"No description":command.CommandDescription)+"\n";
+                if(command.DisplayInHelp)
+                    commandListValue += ParentManager.bot.Prefix + command.CommandName + " - "+(string.IsNullOrEmpty(command.CommandDescription)?"No description":command.CommandDescription)+"\n";
             }
             commandList.Value = commandListValue;
 
