@@ -203,6 +203,7 @@
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="EmbedHelper.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="Internal\BetterList.cs" />
     <Compile Include="Internal\InternalUser.cs" />
     <Compile Include="Internal\InternalUserManager.cs" />
     <Compile Include="Manager.cs" />

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web;
 using Discord;
+using nayuta.Internal;
 
 namespace nayuta.Modules.Waifu
 {
@@ -8,9 +9,9 @@ namespace nayuta.Modules.Waifu
     {
         private static string apiUrl = "https://www.mywaifu.net/api.php";
 
-        public static List<Waifu> GetWaifus(string query)
+        public static BetterList<Waifu> GetWaifus(string query)
         {
-            WaifuResult<List<Waifu>> result = APIHelper<WaifuResult<List<Waifu>>>.GetData(apiUrl + "?apikey="+APIKeys.WaifuAPIKey+"&type=waifu&q="+HttpUtility.HtmlEncode(query));
+            WaifuResult<BetterList<Waifu>> result = APIHelper<WaifuResult<BetterList<Waifu>>>.GetData(apiUrl + "?apikey="+APIKeys.WaifuAPIKey+"&type=waifu&q="+HttpUtility.HtmlEncode(query));
 
             if (result.Code == "200")
             {

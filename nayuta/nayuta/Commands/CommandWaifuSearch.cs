@@ -2,6 +2,7 @@
 using Discord;
 using Discord.WebSocket;
 using Humanizer;
+using nayuta.Internal;
 using nayuta.Modules.Waifu;
 
 namespace nayuta.Commands
@@ -18,7 +19,8 @@ namespace nayuta.Commands
             if (input.Length <= 3)
                 return "Please use a longer query";
 
-            List<Waifu> waifuResults = WaifuApi.GetWaifus(input);
+            BetterList<Waifu> waifuResults = WaifuApi.GetWaifus(input);
+            //return waifuResults+"";
             if (waifuResults != null && waifuResults.Count > 0)
             {
                 Waifu waifu = waifuResults[0];
