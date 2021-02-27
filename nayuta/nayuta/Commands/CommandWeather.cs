@@ -36,24 +36,24 @@ namespace nayuta.Commands
                     new EmbedFieldBuilder()
                     {
                         Name = "Temperature",
-                        Value = ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
-                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F" +
-                                "\nFeels like "+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.FeelTemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
-                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.FeelTemperatureKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F",
+                        Value = ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.TemperatureKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.TemperatureKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Fahrenheit), 1)+"°F" +
+                                "\nFeels like "+Mathf.Round(Mathf.ConvertTemperature(data.Air.FeelTemperatureKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.FeelTemperatureKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Fahrenheit), 1)+"°F",
                         IsInline = true
                     },
                     new EmbedFieldBuilder()
                     {
                         Name = "High",
-                        Value = ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureHighKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
-                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureHighKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F",
+                        Value = ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.TemperatureHighKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.TemperatureHighKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Fahrenheit), 1)+"°F",
                         IsInline = true
                     },
                     new EmbedFieldBuilder()
                     {
                         Name = "Low",
-                        Value = ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureLowKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Celsius), 1)+"°C / " +
-                                ""+Mathf.Round(WeatherApi.ConvertTemperature(data.Air.TemperatureLowKelvin, WeatherApi.TemperatureType.Kelvin, WeatherApi.TemperatureType.Fahrenheit), 1)+"°F",
+                        Value = ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.TemperatureLowKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Celsius), 1)+"°C / " +
+                                ""+Mathf.Round(Mathf.ConvertTemperature(data.Air.TemperatureLowKelvin, Mathf.TemperatureType.Kelvin, Mathf.TemperatureType.Fahrenheit), 1)+"°F",
                         IsInline = true
                     },
                     new EmbedFieldBuilder()

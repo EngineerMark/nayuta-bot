@@ -51,6 +51,9 @@ namespace nayuta.Modules.Waifu
         [JsonProperty("bloodtype")]
         public string Bloodtype { get; set; }
         
+        [JsonProperty("description")]
+        public string Description { get; set; }
+        
         [JsonProperty("images")]
         public List<WaifuImage> Images { get; set; }
         
@@ -61,7 +64,7 @@ namespace nayuta.Modules.Waifu
         {
             get
             {
-                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(_uploadTime);
+                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(_uploadTime==0?1569596103:_uploadTime);
                 return dateTimeOffset;
             }
         }
