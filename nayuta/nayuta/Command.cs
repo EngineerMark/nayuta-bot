@@ -10,6 +10,8 @@ namespace nayuta
         /// If true, the command will test any string text after the command itself
         /// </summary>
         public bool InputValue { get; set; }
+
+        public bool IsNsfw { get; set; } = false;
         private string commandName;
         private string commandDescription;
         private bool displayInHelp;
@@ -49,6 +51,9 @@ namespace nayuta
 
         public dynamic Handle(SocketMessage socketMessage, string userInput, CommandArguments arguments)
         {
+            if (!((SocketTextChannel) socketMessage.Channel).IsNsfw && IsNsfw)
+                return "This command is only allowed in NSFW marked channels";
+            
             string inputString = userInput.ToLower();
             string enteredCommand = inputString;
             List<string> splitInputString = enteredCommand.Split(' ').ToList();

@@ -14,7 +14,7 @@ namespace nayuta.Internal
             if (Count == 0)
                 return default(T);
 
-            return this[new Random().Next(0, Count-1)];
+            return this[new Random((int)DateTimeOffset.Now.ToUnixTimeSeconds()).Next(0, Count)];
         }
     }
 }

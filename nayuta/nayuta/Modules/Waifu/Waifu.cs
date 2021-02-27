@@ -55,7 +55,7 @@ namespace nayuta.Modules.Waifu
         public string Description { get; set; }
         
         [JsonProperty("images")]
-        public List<WaifuImage> Images { get; set; }
+        public BetterList<WaifuImage> Images { get; set; }
         
         [JsonProperty("date_added")]
         private long _uploadTime { get; set; }

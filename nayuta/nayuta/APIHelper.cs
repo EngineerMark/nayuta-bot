@@ -11,6 +11,21 @@ namespace nayuta
     public static class APIHelper<T>
     {
         private static List<Tuple<string, int, string>> cachedApiData = new List<Tuple<string, int, string>>();
+
+        public static bool IsUrlValid(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "HEAD";
+            try
+            {
+                request.GetResponse();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         
         public static T GetData(string url, bool useCache = false)
         {
