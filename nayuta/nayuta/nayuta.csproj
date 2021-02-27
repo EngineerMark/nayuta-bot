@@ -218,8 +218,10 @@
     <Compile Include="Modules\Osu\OsuPlay.cs" />
     <Compile Include="Modules\Osu\OsuRanks.cs" />
     <Compile Include="Modules\Osu\OsuUser.cs" />
+    <Compile Include="Modules\Waifu\User.cs" />
     <Compile Include="Modules\Waifu\Waifu.cs" />
     <Compile Include="Modules\Waifu\WaifuApi.cs" />
+    <Compile Include="Modules\Waifu\WaifuImage.cs" />
     <Compile Include="Modules\Waifu\WaifuMeasurements.cs" />
     <Compile Include="Modules\Waifu\WaifuResult.cs" />
     <Compile Include="Modules\Weather\WeatherApi.cs" />

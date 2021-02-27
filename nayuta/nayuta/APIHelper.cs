@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
+using nayuta.Internal;
 using Newtonsoft.Json;
 
 namespace nayuta

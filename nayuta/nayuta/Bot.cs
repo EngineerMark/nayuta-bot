@@ -9,6 +9,7 @@ using Discord.WebSocket;
 using nayuta.Commands;
 using nayuta.Coroutine;
 using nayuta.Internal;
+using nayuta.Modules.Waifu;
 
 namespace nayuta
 {
@@ -37,6 +38,7 @@ namespace nayuta
         
         public Bot(string token, string prefix)
         {
+            //Test
             this.Prefix = prefix;
             _discordToken = token;
 

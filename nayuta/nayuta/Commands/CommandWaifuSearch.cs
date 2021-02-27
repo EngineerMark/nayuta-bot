@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Discord;
 using Discord.WebSocket;
+using Humanizer;
 using nayuta.Modules.Waifu;
 
 namespace nayuta.Commands
@@ -17,16 +18,18 @@ namespace nayuta.Commands
             if (input.Length <= 3)
                 return "Please use a longer query";
 
-            List<Waifu> waifuResults = WaifuApi.SearchWaifus(input);
+            List<Waifu> waifuResults = WaifuApi.GetWaifus(input);
             if (waifuResults != null && waifuResults.Count > 0)
             {
                 Waifu waifu = waifuResults[0];
+                User uploader = WaifuApi.GetUser(waifu.SubmitterID);
                 string noValue = "\uD83D\uDEC7";
 
                 EmbedBuilder embed = new EmbedBuilder()
                 {
                     Title = waifu.Name,
                     Description = waifu.SourceName,
+                    Url = "https://www.mywaifu.net/waifu?id="+waifu.ID,
                     ImageUrl = "https://www.mywaifu.net/api.php?type=thumbnail&q="+waifu.ID,
                     Fields = new List<EmbedFieldBuilder>()
                     {
@@ -65,7 +68,24 @@ namespace nayuta.Commands
                             Name = "Weight",
                             Value = waifu.Weight==0?noValue:waifu.Weight+"kg",
                             IsInline = true
+                        },
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "Birthday",
+                            Value = waifu.Birthday.Length==0?noValue:waifu.Birthday,
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "Bloodtype",
+                            Value = waifu.Bloodtype.Length==0?noValue:waifu.Bloodtype,
+                            IsInline = true
                         }
+                    },
+                    Footer = new EmbedFooterBuilder()
+                    {
+                        Text = "Submitted by "+uploader.Username+" on "+string.Format("{0}", waifu.UploadTime.DateTime.ToString("MMMM dd, yyyy")),
+                        IconUrl = uploader.Thumbnail
                     }
                 };
 

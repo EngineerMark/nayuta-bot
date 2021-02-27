@@ -7,7 +7,7 @@ namespace nayuta.Modules.Waifu
     {
         private static string apiUrl = "https://www.mywaifu.net/api.php";
 
-        public static List<Waifu> SearchWaifus(string query)
+        public static List<Waifu> GetWaifus(string query)
         {
             WaifuResult<List<Waifu>> result = APIHelper<WaifuResult<List<Waifu>>>.GetData(apiUrl + "?apikey="+APIKeys.WaifuAPIKey+"&type=waifu&q="+HttpUtility.HtmlEncode(query));
 
@@ -33,6 +33,15 @@ namespace nayuta.Modules.Waifu
             
             if (result.Code == "200" && result.Data.Count>0)
                 return result.Data[0];
+            return null;
+        }
+
+        public static User GetUser(int ID)
+        {
+            WaifuResult<User> result = APIHelper<WaifuResult<User>>.GetData(apiUrl + "?apikey="+APIKeys.WaifuAPIKey+"&type=user&q="+HttpUtility.HtmlEncode(ID));
+
+            if (result.Code == "200" && result.Data != null)
+                return result.Data;
             return null;
         }
     }

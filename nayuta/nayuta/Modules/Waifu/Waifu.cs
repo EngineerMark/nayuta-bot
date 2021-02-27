@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using nayuta.Internal;
 using Newtonsoft.Json;
 
 namespace nayuta.Modules.Waifu
@@ -9,6 +11,9 @@ namespace nayuta.Modules.Waifu
         [JsonProperty("id")]
         public int ID { get; set; }
         
+        [JsonProperty("submitted_by")]
+        public int SubmitterID { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
         
@@ -39,6 +44,27 @@ namespace nayuta.Modules.Waifu
         
         [JsonProperty("weight")]
         public int Weight { get; set; }
+        
+        [JsonProperty("birthdate")]
+        public string Birthday { get; set; }
+        
+        [JsonProperty("bloodtype")]
+        public string Bloodtype { get; set; }
+        
+        [JsonProperty("images")]
+        public List<WaifuImage> Images { get; set; }
+        
+        [JsonProperty("date_added")]
+        private long _uploadTime { get; set; }
+
+        public DateTimeOffset UploadTime
+        {
+            get
+            {
+                DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(_uploadTime);
+                return dateTimeOffset;
+            }
+        }
 
         private WaifuMeasurements _measurements = new WaifuMeasurements();
         public WaifuMeasurements Measurements
