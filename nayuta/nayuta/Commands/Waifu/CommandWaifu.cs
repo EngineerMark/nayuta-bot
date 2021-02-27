@@ -1,6 +1,6 @@
 ﻿using Discord.WebSocket;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Waifu
 {
     public abstract class CommandWaifu : Command
     {

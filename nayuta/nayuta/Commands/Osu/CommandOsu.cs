@@ -5,7 +5,7 @@ using Humanizer;
 using nayuta.Internal;
 using nayuta.Modules.Osu;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Osu
 {
     public abstract class CommandOsu : Command
     {

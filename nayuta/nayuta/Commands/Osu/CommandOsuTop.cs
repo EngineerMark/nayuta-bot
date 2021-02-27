@@ -7,7 +7,7 @@ using Humanizer;
 using nayuta.Math;
 using nayuta.Modules.Osu;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Osu
 {
     public class CommandOsuTop : CommandOsu
     {

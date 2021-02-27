@@ -9,7 +9,7 @@ using nayuta.Internal;
 using nayuta.Math;
 using nayuta.Modules.Osu;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Osu
 {
     public class CommandOsuProfile : CommandOsu
     {

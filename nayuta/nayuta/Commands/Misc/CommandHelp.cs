@@ -2,7 +2,7 @@
 using Discord;
 using Discord.WebSocket;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Misc
 {
     public class CommandHelp : Command
     {

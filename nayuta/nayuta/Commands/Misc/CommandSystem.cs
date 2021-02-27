@@ -6,7 +6,7 @@ using Discord;
 using Discord.WebSocket;
 using nayuta.Math;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Misc
 {
     public class CommandSystem : Command
     {

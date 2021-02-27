@@ -2,7 +2,7 @@
 using nayuta.Internal;
 using nayuta.Modules.Osu;
 
-namespace nayuta.Commands
+namespace nayuta.Commands.Osu
 {
     public class CommandOsuRegister : CommandOsu
     {
