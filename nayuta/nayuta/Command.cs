@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Discord.WebSocket;
+using nayuta.Internal;
 
 namespace nayuta
 {
@@ -10,22 +12,34 @@ namespace nayuta
         /// If true, the command will test any string text after the command itself
         /// </summary>
         public bool InputValue { get; set; }
-
         public bool IsNsfw { get; set; } = false;
-        private string commandName;
+        private string commandName; // Main command name, used for references etc
         private string commandDescription;
         private bool displayInHelp;
+
+        protected BetterList<string> CommandNames { get; set; } = new BetterList<string>();
 
         public CommandManager ParentManager { get; set; }
 
         public delegate object ReturnFunc(SocketMessage socketMessage, string input, CommandArguments arguments);
 
         protected ReturnFunc returnFunc;
+
+        protected void RegisterCommandName(string commandName)
+        {
+            if(!CommandNames.Contains(commandName.ToLower()))
+                CommandNames.Add(commandName.ToLower());
+        }
         
         public string CommandName
         {
             get => commandName;
-            private set => commandName = value;
+            private set
+            {
+                if(!CommandNames.Contains(value.ToLower()))
+                    CommandNames.Add(value.ToLower());
+                commandName = value;
+            }
         }
         public string CommandDescription
         {
@@ -41,7 +55,7 @@ namespace nayuta
         
         public Command(string commandName, string commandDescription = null, bool displayInHelp = true)
         {
-            this.commandName = commandName;
+            this.CommandName = commandName;
             this.returnFunc = CommandHandler;
             this.commandDescription = commandDescription;
             this.displayInHelp = displayInHelp;
@@ -66,7 +80,8 @@ namespace nayuta
 
             //return "test value: " + arguments.ToString();
 
-            if (enteredCommand == CommandManager.Instance.bot.Prefix + commandName)
+            //if (enteredCommand == CommandManager.Instance.bot.Prefix + commandName)
+            if (CommandNames.FindAll(a => String.Equals((CommandManager.Instance.bot.Prefix + a), enteredCommand, StringComparison.CurrentCultureIgnoreCase)).Count>0)
                 return returnFunc(socketMessage, InputValue?inputStringAdditional:null, arguments);
             
             return false;
