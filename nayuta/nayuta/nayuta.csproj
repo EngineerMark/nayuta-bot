@@ -188,6 +188,7 @@
     <Compile Include="Commands\Misc\CommandHelp.cs" />
     <Compile Include="Commands\Misc\CommandPing.cs" />
     <Compile Include="Commands\Misc\CommandSystem.cs" />
+    <Compile Include="Commands\NHentai\CommandNHentai.cs" />
     <Compile Include="Commands\Osu\CommandOsu.cs" />
     <Compile Include="Commands\Osu\CommandOsuProfile.cs" />
     <Compile Include="Commands\Osu\CommandOsuRecent.cs" />
@@ -208,6 +209,10 @@
     <Compile Include="Internal\InternalUserManager.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Math\Mathf.cs" />
+    <Compile Include="Modules\NHentai\Book.cs" />
+    <Compile Include="Modules\NHentai\BookTag.cs" />
+    <Compile Include="Modules\NHentai\BookTitle.cs" />
+    <Compile Include="Modules\NHentai\NHentaiApi.cs" />
     <Compile Include="Modules\Osu\BeatmapStatus.cs" />
     <Compile Include="Modules\Osu\HitObject.cs" />
     <Compile Include="Modules\Osu\MapStats.cs" />

@@ -8,6 +8,7 @@ using Discord;
 using Discord.WebSocket;
 using nayuta.Commands;
 using nayuta.Commands.Misc;
+using nayuta.Commands.NHentai;
 using nayuta.Commands.Osu;
 using nayuta.Commands.Waifu;
 using nayuta.Coroutine;
@@ -56,6 +57,7 @@ namespace nayuta
             _commandManager.RegisterCommand(new CommandOsuRecent());
             _commandManager.RegisterCommand(new CommandOsuTop());
             _commandManager.RegisterCommand(new CommandWaifuSearch());
+            _commandManager.RegisterCommand(new CommandNHentai());
 
             _databaseManager = new DatabaseManager();
             _internalUserManager = new InternalUserManager();
